@@ -1,0 +1,73 @@
+# Source Extraction
+import requests
+import pandas as pd
+
+#ฟังก์ชั่นการทำงานของการดึงข้อมูล ของเว็บ ClimateWatch
+def urlCW(soruce_id, gas_id,max_pages=200):
+    base_URL = "https://www.climatewatchdata.org/api/v1/data/historical_emissions"
+    all_data = []
+    page = 1
+
+    # อ่านค่า sector_id และ id_gas จากไฟล์
+    while True:
+        params = {
+            "source_ids[]": soruce_id,
+            "gas_ids[]": gas_id,
+            "page": page,
+            "per_page": 10000,
+            "sort_col": "country",
+            "sort_dir": "ASC"
+        }
+        response = requests.get(base_URL,params=params)
+        data = response.json()
+        
+        #if เช็คหากไม่มีข้อมูลในdata ให้หยุด
+        if not data.get("data"):
+            break
+        all_data.extend(data["data"]) 
+        
+        #ทำjsonให้เป็นมาตราฐานให้กลายเป็นตาราง
+        df = pd.json_normalize(data["data"])
+        print(df) 
+        
+        #if ถ้าเลขหน้าpageน้อยกว่าmaxpageให้ปริ้นหน้าต่อไป หากหมดให้หยุด
+        if page < max_pages:
+            page += 1
+        else:
+            break
+    final_df = pd.json_normalize(all_data)
+    final_df.to_csv("ClimateWatchDATA.csv", index=False)
+source_id = [214,215,216,217]
+gas_id = [474,475,476,477]        
+# urlCW(source_id, gas_id)
+
+#ฟังก์ชั่นดึงข้อมูลจากเว็บ Our world in Data
+def urlOWD():
+    # กำหนด URL สำหรับแต่ละประเภทของก๊าซเรือนกระจก
+    urls = {
+        "CO2": [
+            "https://ourworldindata.org/grapher/cumulative-co-emissions.csv?v=1&csvType=full&useColumnShortNames=true",
+            "https://ourworldindata.org/grapher/co-emissions-by-sector.csv?v=1&csvType=full&useColumnShortNames=true",
+        ],
+        "CH4": [
+            "https://ourworldindata.org/grapher/methane-emissions.csv?v=1&csvType=full&useColumnShortNames=true",
+            "https://ourworldindata.org/grapher/methane-emissions-by-sector.csv?v=1&csvType=full&useColumnShortNames=true"
+        ],
+        "N2O": [
+            "https://ourworldindata.org/grapher/nitrous-oxide-emissions.csv?v=1&csvType=full&useColumnShortNames=true",
+            "https://ourworldindata.org/grapher/nitrous-oxide-emissions-by-sector.csv?v=1&csvType=full&useColumnShortNames=true"
+        ]
+    }
+    # ใช้for ดึงข้อมูล
+    dataframes = {}
+    for gas, url_list in urls.items():
+        dataframes[gas]= [pd.read_csv(url, storage_options={'User-Agent': 'Our World In Data data fetch/1.0'}) for url in url_list]
+    # แสดง
+    for gas, df in dataframes.items():
+        # วนลูปในรายการ
+        for i, df in enumerate(df):
+            print(df) 
+            print("=" * 50) 
+            filename = f"{gas}_data_file_{i+1}.csv"
+            df.to_csv(filename, index=False)
+# urlOWD()
