@@ -94,9 +94,9 @@ def urlCT():
     # #ตัวที่สองที่เจอ
     # cedf = ct.read_country_emissions(GAS_LIST)
     # print(cedf)
-urlCT()
+# urlCT()
 
-#รับ้เอาค่าที่มากที่สุดแต่ละปีีมา
+#รับเอาค่าที่มากที่สุดแต่ละปีีมา
 def urlCT2():
     gases = ["co2e_100yr","co2", "n2o", "ch4"]
     years = [2021, 2022, 2023, 2024]
@@ -110,6 +110,9 @@ def urlCT2():
             if "totals" in json_data:
                 total = json_data["totals"]
                 print(f"Gas: {gas}, Year: {year}, Total Value: {total['value']}")
-urlCT2()
+# urlCT2()
+
+# หาทางเอาค่า แต่ละประเทศหรือภูมิภาค
+def urlCT3():
 
 
