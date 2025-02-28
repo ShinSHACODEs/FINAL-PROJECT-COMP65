@@ -1,4 +1,6 @@
 # Library จำเป็นสำหรับ Project
+โปรเจคจบนี้เป็ฯส่วนหนึ่งของวิชา Project Computing 1 และ 2
+โดยมุ่งเน้นไปที่ด้าน Data เพื่อเก็บและวิเคราะห์ข้อมูลสำหรับการทำโปรเจคจบ
 
 import requests
 from datetime import datetime
@@ -8,3 +10,5 @@ from ctrace.constants import * # จากเว็บ https://tjhunter.github.i
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
+
+
