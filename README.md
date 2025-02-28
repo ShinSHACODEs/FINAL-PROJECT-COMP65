@@ -1,5 +1,5 @@
 # HEAD OF README
-โปรเจคจบนี้เป็ฯส่วนหนึ่งของวิชา Project Computing 1 และ 2
+โปรเจคจบนี้เป็นส่วนหนึ่งของวิชา Project Computing 1 และ 2
 โดยมุ่งเน้นไปที่ด้าน Data เพื่อเก็บและวิเคราะห์ข้อมูลสำหรับการทำโปรเจคจบ
 
 เป็นโปรเจคด้าน Data Visualization, Data Analysis, Data Sciene และ ด้าน Bussiness Inteliigent
