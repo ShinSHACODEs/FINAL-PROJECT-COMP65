@@ -7,6 +7,11 @@ from ctrace.constants import * # จากเว็บ https://tjhunter.github.i
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
  
 #ปีเก่าสุดของ CT
 def start_yearforCT(data=None, default_year=2021):
@@ -136,7 +141,7 @@ def urlCT2():
                 print(f"Gas: {gas}, Year: {year}, Total Value: {total['value']}")
     df = pd.DataFrame(results)
     # df.to_csv("ClimateTrace_Total.csv", index=False)  
-urlCT2()   
+# urlCT2()   
 
 #Selenium รอแก้ใน ปีถัดไปได้
 def urlCT3():
@@ -148,20 +153,35 @@ def urlCT3():
     driver.quit()
 # urlCT3()
 
-# def urlCarMo(): # ได้ไหม?
-#     option = webdriver.ChromeOptions()
-#     option.add_experimental_option("detach", True)
-#     driver = webdriver.Chrome(options=option)
-#     driver.get("https://datas.carbonmonitor.org/API/downloadFullDataset.php?source=carbon_global")
-#     time.sleep(5)
-#     driver.quit()
-# # urlCarMo()
+def urlCarMo(): # ได้ไหม?
+    option = webdriver.ChromeOptions()
+    option.add_experimental_option("detach", True)
+    driver = webdriver.Chrome(options=option)
+    driver.get("https://datas.carbonmonitor.org/API/downloadFullDataset.php?source=carbon_global")
+    time.sleep(5)
+    driver.quit()
+# urlCarMo()
 
-# def urlEdgar(): #ลิงค์อาจไม่รองรับในอนาคตต
-#     option = webdriver.ChromeOptions()
-#     option.add_experimental_option("detach", True)
-#     driver = webdriver.Chrome(options=option)
-#     driver.get("https://edgar.jrc.ec.europa.eu/booklet/EDGAR_2024_GHG_booklet_2024.xlsx")
-#     time.sleep(5)
-#     driver.quit()
-# # urlEdgar()
+def download_edgar(): # ปี2024
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("detach", True)
+    service = Service()
+    driver = webdriver.Chrome(service=service, options=options)
+
+    # เปิดหน้าเว็บ
+    driver.get("https://edgar.jrc.ec.europa.eu/report_2024#emissions_table")
+    wait = WebDriverWait(driver, 20)
+
+    # เลื่อนหน้าให้เห็นปุ่ม
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(3)
+
+    # ค้นหาปุ่มดาวน์โหลด
+    download_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[contains(@href, "EDGAR_2024_GHG_booklet_2024.xlsx")]')))
+
+    # คลิกด้วย JavaScript (ข้ามการตรวจสอบความบัง)
+    driver.execute_script("arguments[0].click();", download_button)
+    time.sleep(10)
+    driver.quit()
+# download_edgar()
+
