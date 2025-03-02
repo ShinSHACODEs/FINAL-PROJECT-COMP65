@@ -180,7 +180,7 @@ def download_edgar(): # ปี2024
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
     current_year = datetime.now().year
-    lastyears = 2023
+    lastyears = current_year - 1
     service = Service()
     driver = webdriver.Chrome(service=service, options=options)
 
