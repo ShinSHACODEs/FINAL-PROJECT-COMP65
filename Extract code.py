@@ -1,17 +1,12 @@
 # Source Extraction
 import requests
+import os
+import shutil
 from datetime import datetime
 import pandas as pd
-import ctrace as ct #pip install climate-trace, #pip install huggingface_hub
 from ctrace.constants import * # จากเว็บ https://tjhunter.github.io/climate-trace-handbook/initial_analysis.html#country-emissions
-from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
  
 #ปีเก่าสุดของ CT
 def start_yearforCT(data=None, default_year=2021):
@@ -21,43 +16,56 @@ def start_yearforCT(data=None, default_year=2021):
         return default_year
 
 #ฟังก์ชั่นการทำงานของการดึงข้อมูล ของเว็บ ClimateWatch  ข้อมูล 1990 ถึง 2021
-def urlCW(source_id, gas_id,max_pages=200):
+def urlCW(source_id, gas_id, max_pages=200):
     base_URL = "https://www.climatewatchdata.org/api/v1/data/historical_emissions"
     all_data = []
     page = 1
 
-    # อ่านค่า sector_id และ id_gas จากไฟล์มีให้้ใช้ในเว็บ
     while True:
         params = {
             "source_ids[]": source_id,
             "gas_ids[]": gas_id,
             "page": page,
             "per_page": 10000,
-            "sort_col": "country",
+            "sort_col": "country" ,
             "sort_dir": "ASC"
         }
-        response = requests.get(base_URL,params=params)
+        response = requests.get(base_URL, params=params)
         data = response.json()
-        
-        #if เช็คหากไม่มีข้อมูลในdata ให้หยุด
+
         if not data.get("data"):
             break
-        all_data.extend(data["data"]) 
-        
-        #ทำjsonให้เป็นมาตราฐานให้กลายเป็นตาราง
-        df = pd.DataFrame.from_dict(data["data"]) # pd.json_normalize() เปลี่ยนเป็น pd.DataFrame.from_dict()
-        # print(df) 
-        
-        #if ถ้าเลขหน้าpageน้อยกว่าmaxpageให้ปริ้นหน้าต่อไป หากหมดให้หยุด
+
+        all_data.extend(data["data"])
+
         if page < max_pages:
             page += 1
         else:
             break
-    final_df = pd.DataFrame.from_dict(all_data)
-    final_df.to_csv("ClimateWatchDATA.csv", index=False)   
-source_id = [214,215,216,217]
-gas_id = [474,475,476,477]        
+
+    # แปลงข้อมูลเป็น DataFrame
+    df = pd.DataFrame(all_data)
+    
+    # บันทึกข้อมูลเป็น CSV
+    df.to_csv("ClimateWatchDATA.csv", index=False)
+    print("บันทึกข้อมูลเรียบร้อย: ClimateWatchDATA.csv")
+
+source_id = [214, 215, 216, 217]
+gas_id = [474, 475, 476, 477]  
 # urlCW(source_id, gas_id)
+
+
+
+    # # แยกข้อมูล emissions ออกเป็น year และ value
+    # emissions_expanded = df.explode("emissions").reset_index(drop=True)
+    # emissions_expanded[["year", "value"]] = emissions_expanded["emissions"].apply(lambda x: pd.Series(x))
+
+    # # ลบคอลัมน์ emissions เดิม
+    # emissions_expanded.drop("emissions", axis=1, inplace=True)
+
+    # # เลือกเฉพาะคอลัมน์ที่ต้องการ
+    # result_df = emissions_expanded[["country", "iso_code3", "data_source", "sector", "gas", "year", "value"]]
+
 
 #ฟังก์ชั่นดึงข้อมูลจากเว็บ Our world in Data ข้อมูล 1750 ถึง 2023 อนาคตสามารถรับเพิ่มได้เป็น API
 def urlOWD():
@@ -96,25 +104,33 @@ def urlOWD():
 
 # ฟังก์ชั่นดึงข้อมูลจากเว็บ Climate trace พื้นที่ตามจุดที่มีการเปิดเผย
 def urlCT():
-    #กำหนด gas และ year เป็น list สำหรับใช้ใน lurl
+    # Define gases and years
     gases = ["co2e_100yr", "co2", "n2o", "ch4"]
     current_year = datetime.now().year
-    years = list(range(start_yearforCT(),current_year))  # ข้อมูลจาก api มีถึงแค่ 2021
+    years = list(range(start_yearforCT(), current_year))
+
     results = []
 
     for gas in gases:
         for year in years:
-            url = f"https://api.c10e.org/v6/app/assets?year={years}&gas={gas}&subsectors="
+            url = f"https://api.c10e.org/v6/app/assets?year={year}&gas={gas}&subsectors="
             response = requests.get(url)
-            json_data = response.json()
-            
-            if "assets" in json_data:
-                df = pd.DataFrame.from_dict(json_data["assets"])
-                results.append(df)
-                print(f"Gas: {gas}, Year: {year}")
-    final_df = pd.concat(results, ignore_index=True)
-    final_df.to_csv("ClimateTraceArea.csv", index=False)  
-# urlCT()  
+
+            if response.status_code == 200:
+                json_data = response.json()
+
+                if "assets" in json_data and json_data["assets"]:
+                    df = pd.DataFrame(json_data["assets"])
+                    df["year"] = year  # Add the year column
+                    df["gas"] = gas  # Add the gas column
+                    results.append(df)
+                    print(f"Fetched: Gas={gas}, Year={year}")
+
+    if results:
+        final_df = pd.concat(results, ignore_index=True)
+        final_df.to_csv("ClimateTraceArea.csv", index=False)
+        print("Data saved to ClimateTraceArea.csv")
+# urlCT()
 
 # รับเอาค่าที่มากที่สุดแต่ละปีีมา
 def urlCT2():
@@ -140,48 +156,51 @@ def urlCT2():
                 })
                 print(f"Gas: {gas}, Year: {year}, Total Value: {total['value']}")
     df = pd.DataFrame(results)
-    # df.to_csv("ClimateTrace_Total.csv", index=False)  
+    df.to_csv("ClimateTrace_Total.csv", index=False)  
 # urlCT2()   
 
-#Selenium รอแก้ใน ปีถัดไปได้
 def urlCT3():
+    url = f"https://api.c10e.org/v6/country/emissions/timeseries/subsectors?since=2015&to=2024&download=csv&combined=false"
+    
+    # ตั้งค่า Chrome WebDriver
     option = webdriver.ChromeOptions()
     option.add_experimental_option("detach", True)
     driver = webdriver.Chrome(options=option)
-    driver.get("https://api.c10e.org/v6/country/emissions/timeseries/subsectors?since=2015&to=2024&download=csv&combined=false")
-    time.sleep(5)
+    driver.get(url)
+    time.sleep(5)  # รอให้ดาวน์โหลดเสร็จ
     driver.quit()
+    
+    # ตรวจสอบไฟล์ที่ดาวน์โหลด
+    download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
+    downloaded_file = [f for f in os.listdir(download_folder) if "trace" in f]
+    
+    # ถ้ามีไฟล์ที่ดาวน์โหลด
+    if downloaded_file:
+        # กำหนดที่อยู่ไฟล์ที่ดาวน์โหลดและปลายทาง
+        downloaded_file_path = os.path.join(download_folder, downloaded_file[0])
+        target_folder = os.path.join(os.getcwd())
+        target_file = os.path.join(target_folder, "trace_data_since_2015_to_2024_combined_false.csv")
+        
+        # ย้ายไฟล์ไปยังที่อยู่ปลายทาง
+        shutil.move(downloaded_file_path, target_file)
+        print(f"ไฟล์ถูกย้ายไปที่: {target_file}")
+    else:
+        print("ไม่พบไฟล์ที่ดาวน์โหลด!")
+
 # urlCT3()
 
-def urlCarMo(): # ได้ไหม?
-    option = webdriver.ChromeOptions()
-    option.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(options=option)
-    driver.get("https://datas.carbonmonitor.org/API/downloadFullDataset.php?source=carbon_global")
-    time.sleep(5)
-    driver.quit()
+def comapper():
+    response = requests.get("https://api.carbonmapper.org/api/v1/catalog/plume-csv")
+    if response.status_code == 200:
+        with open("plume_data.csv", "wb") as file:
+            file.write(response.content)
+# comapper()
+
+def urlCarMo():
+     option = webdriver.ChromeOptions()
+     option.add_experimental_option("detach", True)
+     driver = webdriver.Chrome(options=option)
+     driver.get("https://datas.carbonmonitor.org/API/downloadFullDataset.php?source=carbon_global")
+     time.sleep(5)
+     driver.quit()
 # urlCarMo()
-
-def download_edgar(): # ปี2024
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option("detach", True)
-    service = Service()
-    driver = webdriver.Chrome(service=service, options=options)
-
-    # เปิดหน้าเว็บ
-    driver.get("https://edgar.jrc.ec.europa.eu/report_2024#emissions_table")
-    wait = WebDriverWait(driver, 20)
-
-    # เลื่อนหน้าให้เห็นปุ่ม
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(3)
-
-    # ค้นหาปุ่มดาวน์โหลด
-    download_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[contains(@href, "EDGAR_2024_GHG_booklet_2024.xlsx")]')))
-
-    # คลิกด้วย JavaScript (ข้ามการตรวจสอบความบัง)
-    driver.execute_script("arguments[0].click();", download_button)
-    time.sleep(10)
-    driver.quit()
-# download_edgar()
-
