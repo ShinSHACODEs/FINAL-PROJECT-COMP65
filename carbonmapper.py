@@ -1,11 +1,8 @@
 import requests
 import pandas as pd
-from datetime import datetime
 import io
 import shutil
 import os
-
-# ทำให้ดึงตลอด
 
 def comapper():
     url = "https://api.carbonmapper.org/api/v1/catalog/plume-csv"
@@ -13,21 +10,41 @@ def comapper():
     
     if response.status_code == 200:
         try:
-            # แปลง response content เป็น DataFrame
             read_file = pd.read_csv(io.StringIO(response.text))        
-            # บันทึกข้อมูลลงไฟล์ CSV
             file_name = "plume_data.csv"
             read_file.to_csv(file_name, index=False)
-            print("บันทึกข้อมูลเรียบร้อย")
-            
-            # ดึงที่อยู่ของโฟลเดอร์ที่โค้ดทำงาน
-            target_folder = os.path.dirname(os.path.realpath(__file__))
-            target_file = os.path.join(target_folder, file_name)
-            
-            # ย้ายไฟล์ที่ดาวน์โหลดไปยังโฟลเดอร์เดียวกับไฟล์โค้ด
-            shutil.move(file_name, target_file)
-            print(f"ย้ายไฟล์ไปยัง: {target_file}")
-            
+            shutil.move(file_name, os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name))
+            print("ย้ายไฟล์สำเร็จ")
         except Exception as e:
-            print(f"เกิดข้อผิดพลาดในการประมวลผล CSV: {e}")
+            print(f"เกิดข้อผิดพลาด: {e}")
 comapper()
+
+def readcsv():
+    try:
+        df = pd.read_csv('plume_data.csv')
+        columns_to_drop = [
+            'plume_bounds', 'instrument', 'mission_phase', 'emission_cmf_type', 
+            'emission_version', 'processing_software', 'gsd', 'sensitivity_mode', 
+            'off_nadir', 'published_at', 'wind_direction_std_auto', 'wind_source_auto', 
+            'platform', 'provider', 'plume_tif', 'plume_png', 'con_tif', 'rgb_tif', 'rgb_png'
+        ]
+        df.drop(columns=columns_to_drop, inplace=True)
+        df.drop_duplicates(inplace=True)
+
+        os.remove('plume_data.csv')
+
+        cleaned_file = 'plume_data_cleaned.csv'
+        if os.path.exists(cleaned_file):
+            existing_df = pd.read_csv(cleaned_file)
+            combined_df = pd.concat([existing_df, df]).drop_duplicates()
+            if len(combined_df) == len(existing_df) + len(df):
+                print("ไม่มีข้อมูลซ้ำ")
+            else:
+                print("มีข้อมูลซ้ำ")
+            combined_df.to_csv(cleaned_file, index=False)
+        else:
+            df.to_csv(cleaned_file, index=False)
+            print("บันทึกไฟล์ใหม่")
+    except Exception as e:
+        print(f"เกิดข้อผิดพลาด: {e}")
+readcsv()
