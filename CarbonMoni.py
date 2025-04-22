@@ -20,7 +20,7 @@ def urlCarMo():
     latest = os.path.join(download_folder, files[0])
 
     # โหลดและลบคอลัมน์ Unnamed
-    df_new = pd.read_csv(latest).drop(columns=lambda c: c.startswith("Unnamed"), errors='ignore')
+    df_new = pd.read_csv(latest).drop(columns=lambda c: c.startswith("Unnamed: 4"), errors='ignore')
     dest = os.path.join(os.getcwd(), "carbon_monitor.csv")
 
     if os.path.exists(dest):

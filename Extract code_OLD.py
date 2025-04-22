@@ -4,7 +4,6 @@ import os
 import shutil
 from datetime import datetime
 import pandas as pd
-from ctrace.constants import * # จากเว็บ https://tjhunter.github.io/climate-trace-handbook/initial_analysis.html#country-emissions
 from selenium import webdriver
 import time
  
@@ -186,7 +185,7 @@ def urlCT3():
         print(f"ไฟล์ถูกย้ายไปที่: {target_file}")
     else:
         print("ไม่พบไฟล์ที่ดาวน์โหลด!")
-# urlCT3()
+urlCT3()
 
 def comapper():
     response = requests.get("https://api.carbonmapper.org/api/v1/catalog/plume-csv")
