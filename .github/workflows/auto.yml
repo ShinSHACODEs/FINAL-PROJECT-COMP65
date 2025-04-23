@@ -1,35 +1,36 @@
 name: Daily Weather Scripts
+# ชื่อ Workflow: สคริปต์สภาพอากาศรายวัน
 
-# กำหนดเวลารันทุกวันเวลา 15:00 UTC (22:00 ไทย)
 on:
   push:
     branches:
       - main
-
   schedule:
-    - cron: '0 14 * * *'  # ทุกวันเวลา 14:00 UTC (21:00 น. ไทย)
-  workflow_dispatch:  # เพิ่มปุ่ม manual run บน GitHub ด้วย
+    - cron: '0 14 * * *'  # รันทุกวัน 15:00 UTC (22:00 ไทย)
+  workflow_dispatch:  # รันด้วยตนเองได้
 
 jobs:
   run-python-scripts:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # ใช้รุ่นล่าสุด
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'  # เปลี่ยนเป็นเวอร์ชันที่ต้องการ
-
+          python-version: '3.10'  # ใช้ Python 3.10
+          
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
+          
       - name: Run tmd.py
         run: python tmd.py
-
+        continue-on-error: false  # หยุดถ้ามีข้อผิดพลาด
+        
       - name: Run Weather_data.py
         run: python Weather_data.py
+        continue-on-error: false  # หยุดถ้ามีข้อผิดพลาด
