@@ -7,7 +7,7 @@ on:
       - main
 
   schedule:
-    - cron: '59 15 * * *'  # ทุกวันเวลา 15:00 UTC (22:00 น. ไทย)
+    - cron: '0 14 * * *'  # ทุกวันเวลา 14:00 UTC (21:00 น. ไทย)
   workflow_dispatch:  # เพิ่มปุ่ม manual run บน GitHub ด้วย
 
 jobs:
