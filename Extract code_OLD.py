@@ -1,4 +1,3 @@
-# Source Extraction
 import requests
 import os
 import shutil
@@ -53,19 +52,6 @@ source_id = [214, 215, 216, 217]
 gas_id = [474, 475, 476, 477]  
 # urlCW(source_id, gas_id)
 
-
-
-    # # แยกข้อมูล emissions ออกเป็น year และ value
-    # emissions_expanded = df.explode("emissions").reset_index(drop=True)
-    # emissions_expanded[["year", "value"]] = emissions_expanded["emissions"].apply(lambda x: pd.Series(x))
-
-    # # ลบคอลัมน์ emissions เดิม
-    # emissions_expanded.drop("emissions", axis=1, inplace=True)
-
-    # # เลือกเฉพาะคอลัมน์ที่ต้องการ
-    # result_df = emissions_expanded[["country", "iso_code3", "data_source", "sector", "gas", "year", "value"]]
-
-
 #ฟังก์ชั่นดึงข้อมูลจากเว็บ Our world in Data ข้อมูล 1750 ถึง 2023 อนาคตสามารถรับเพิ่มได้เป็น API
 def urlOWD():
     
@@ -102,62 +88,6 @@ def urlOWD():
 # urlOWD()
 
 # ฟังก์ชั่นดึงข้อมูลจากเว็บ Climate trace พื้นที่ตามจุดที่มีการเปิดเผย
-def urlCT():
-    # Define gases and years
-    gases = ["co2e_100yr", "co2", "n2o", "ch4"]
-    current_year = datetime.now().year
-    years = list(range(start_yearforCT(), current_year))
-
-    results = []
-
-    for gas in gases:
-        for year in years:
-            url = f"https://api.c10e.org/v6/app/assets?year={year}&gas={gas}&subsectors="
-            response = requests.get(url)
-
-            if response.status_code == 200:
-                json_data = response.json()
-
-                if "assets" in json_data and json_data["assets"]:
-                    df = pd.DataFrame(json_data["assets"])
-                    df["year"] = year  # Add the year column
-                    df["gas"] = gas  # Add the gas column
-                    results.append(df)
-                    print(f"Fetched: Gas={gas}, Year={year}")
-
-    if results:
-        final_df = pd.concat(results, ignore_index=True)
-        final_df.to_csv("ClimateTraceArea.csv", index=False)
-        print("Data saved to ClimateTraceArea.csv")
-# urlCT()
-
-# รับเอาค่าที่มากที่สุดแต่ละปีีมา
-def urlCT2():
-    gases = ["co2e_100yr", "co2", "n2o", "ch4"]
-    current_year = datetime.now().year
-    years = list(range(start_yearforCT(), current_year))  # ข้อมูลจาก api มีถึงแค่ 2021
-    
-    results = []  
-
-    for gas in gases:
-        for year in years:
-            url = f"https://api.c10e.org/v6/app/emissions?years={year}&gas={gas}&subsectors=&excludeForestry=true"
-            response = requests.get(url)
-            json_data = response.json()
-            
-            if "totals" in json_data:
-                total = json_data["totals"]
-                # Append the total data to the results list
-                results.append({
-                    'Gas': gas,
-                    'Year': year,
-                    'Total Value': total['value']
-                })
-                print(f"Gas: {gas}, Year: {year}, Total Value: {total['value']}")
-    df = pd.DataFrame(results)
-    df.to_csv("ClimateTrace_Total.csv", index=False)  
-# urlCT2()   
-
 def urlCT3():
     url = f"https://api.c10e.org/v6/country/emissions/timeseries/subsectors?since=2015&to=2024&download=csv&combined=false"
     
@@ -185,7 +115,7 @@ def urlCT3():
         print(f"ไฟล์ถูกย้ายไปที่: {target_file}")
     else:
         print("ไม่พบไฟล์ที่ดาวน์โหลด!")
-urlCT3()
+# urlCT3()
 
 def comapper():
     response = requests.get("https://api.carbonmapper.org/api/v1/catalog/plume-csv")

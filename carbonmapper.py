@@ -7,16 +7,12 @@ import os
 def comapper():
     url = "https://api.carbonmapper.org/api/v1/catalog/plume-csv"
     response = requests.get(url)
-    
     if response.status_code == 200:
-        try:
-            read_file = pd.read_csv(io.StringIO(response.text))        
-            file_name = "plume_data.csv"
-            read_file.to_csv(file_name, index=False)
-            shutil.move(file_name, os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name))
-            print("ย้ายไฟล์สำเร็จ")
-        except Exception as e:
-            print(f"เกิดข้อผิดพลาด: {e}")
+        read_file = pd.read_csv(io.StringIO(response.text))        
+        file_name = "plume_data.csv"
+        read_file.to_csv(file_name, index=False)
+        shutil.move(file_name, os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name))
+        print("ย้ายไฟล์สำเร็จ")
 comapper()
 
 def readcsv():

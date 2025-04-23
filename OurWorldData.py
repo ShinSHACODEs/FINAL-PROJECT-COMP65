@@ -1,5 +1,4 @@
 import pandas as pd
-from datetime import datetime
 import os
 
 # ฟังก์ชันหาปีที่มากที่สุดจากคอลัมน์ 'Year'
@@ -39,7 +38,6 @@ def urlOWD():
             try:
                 new_df = pd.read_csv(url, storage_options={'User-Agent': 'Our World In Data data fetch/1.0'})
             except Exception as e:
-                print(f"ไม่สามารถดึงข้อมูลจาก {url}: {e}")
                 continue
 
             # โหลดข้อมูลเก่า (ถ้ามี)
@@ -47,7 +45,6 @@ def urlOWD():
                 try:
                     existing_df = pd.read_csv(filename)
                 except Exception as e:
-                    print(f"เกิดข้อผิดพลาดในการโหลด {filename}: {e}")
                     continue
 
                 # หาปีที่มากที่สุดจากข้อมูลเก่า

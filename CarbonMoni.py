@@ -13,9 +13,6 @@ def urlCarMo():
 
     # หาไฟล์ล่าสุด
     files = [f for f in os.listdir(download_folder) if f.startswith("carbonmonitor")]
-    if not files:
-        print("ไม่พบไฟล์ที่ดาวน์โหลด!")
-        return
     files.sort(key=lambda f: os.path.getctime(os.path.join(download_folder, f)), reverse=True)
     latest = os.path.join(download_folder, files[0])
 
@@ -25,9 +22,6 @@ def urlCarMo():
 
     if os.path.exists(dest):
         df_old = pd.read_csv(dest)
-
-        # ตรวจสอบว่าไฟล์ใหม่และเก่ามีข้อมูลเหมือนกันหรือไม่
-        # หากข้อมูลไม่ซ้ำกัน จะรวมข้อมูลใหม่ที่ไม่มีในไฟล์เก่า
         df_combined = pd.concat([df_old, df_new]).drop_duplicates(ignore_index=True)
 
         # ถ้าไม่มีการเปลี่ยนแปลงในข้อมูล

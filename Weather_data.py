@@ -33,10 +33,5 @@ def weather():
         df_combined.to_csv(file_path, index=False, encoding="utf-8-sig")
         print("ข้อมูลถูกรวมและบันทึกลงไฟล์แล้ว:")
         print(df_combined)
-    else:
-        # ถ้าไม่มีไฟล์ก็สร้างใหม่เลย
-        df_new.to_csv(file_path, index=False, encoding="utf-8-sig")
-        print("ข้อมูลถูกบันทึกครั้งแรก:")
-        print(df_new)
 
 weather()

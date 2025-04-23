@@ -35,9 +35,6 @@ def urlCT3():
 
     # ค้นหาไฟล์ที่ดาวน์โหลด
     trace_files = glob.glob(os.path.join(download_folder, "trace*.csv"))
-    if not trace_files:
-        print("ไม่พบไฟล์ที่ดาวน์โหลด")
-        return
     
     # ใช้ไฟล์ที่เจอล่าสุด
     downloaded_file = max(trace_files, key=os.path.getctime)
@@ -63,8 +60,5 @@ def urlCT3():
         print(f"ข้อมูลถูกรวมและบันทึกที่: {target_file}")
     else:
         print("ไม่มีข้อมูลใหม่สำหรับการเพิ่ม")
-    
-    # ลบไฟล์ที่เปลี่ยนชื่อแล้ว
     os.remove(renamed_file)
-    print(f"ไฟล์ที่เปลี่ยนชื่อถูกลบ: {renamed_file}")
 urlCT3()

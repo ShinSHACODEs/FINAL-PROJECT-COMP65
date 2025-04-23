@@ -10,8 +10,6 @@ import json
 def max_year(filename="ClimateWatchDATA.csv"):
     try:
         df = pd.read_csv(filename)
-
-        # แปลงคอลัมน์ emissions เป็น list ของ dict หากเป็น string
         def parse_emissions(emissions):
             try:
                 return json.loads(emissions.replace("'", '"')) if isinstance(emissions, str) else emissions
