@@ -6,16 +6,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 import os
 
 def tmd():
     options = Options()
-    options.add_argument("--headless")  # ทำให้ไม่ต้องเปิดหน้าต่าง Chrome
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(options=options)
     url = "https://www.tmd.go.th/climate/daily"
     driver.get(url)
 
