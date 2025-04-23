@@ -16,7 +16,7 @@
 -> carbonmapper
 
 ไฟล์สำหรับดึงข้อมูล สภาพอากาศรายวัน อุณหภูมิ:
--> SCARPING
+-> Weater_data.py tmd.py
 
 ไฟล์สำหรับ แก้ year ใน Climatewatch:
 -> fixyearCW
