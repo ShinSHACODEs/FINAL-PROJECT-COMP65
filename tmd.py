@@ -10,7 +10,10 @@ import os
 
 def tmd():
     options = Options()
-    driver = webdriver.Chrome(options=options)
+    options.add_argument("--headless")  # ทำให้ไม่ต้องเปิดหน้าต่าง Chrome
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     url = "https://www.tmd.go.th/climate/daily"
     driver.get(url)
 
