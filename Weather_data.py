@@ -1,10 +1,10 @@
 import requests
- from bs4 import BeautifulSoup
- import pandas as pd
- from datetime import datetime
- import os
+from bs4 import BeautifulSoup
+import pandas as pd
+from datetime import datetime
+import os
  
- def weather():
+def weather():
      url = "https://www.timeanddate.com/weather/?low=4&sort=1"
      res = requests.get(url)
      soup = BeautifulSoup(res.text, 'html.parser')
@@ -39,4 +39,4 @@ import requests
          print("ข้อมูลถูกบันทึกครั้งแรก:")
          print(df_new)
  
- weather()
+weather()
