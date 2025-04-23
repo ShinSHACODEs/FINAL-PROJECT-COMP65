@@ -12,7 +12,7 @@ def weather():
     # ดึงข้อมูลจากการ soup
     primary = soup.find('div', class_="tb-scroll")
     data = []
-    for row in primary.findAll('tr'):
+    for row in primary.find_all('tr'):
         cells = row.find_all('td')
         row_data = [cell.get_text(strip=True) for cell in cells]
         if row_data:
