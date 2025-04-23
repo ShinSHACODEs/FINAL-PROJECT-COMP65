@@ -20,3 +20,8 @@
 
 ไฟล์สำหรับ แก้ year ใน Climatewatch:
 -> fixyearCW
+
+# ER Diagram
+![Diagram Final](https://github.com/user-attachments/assets/715c1214-c621-4c7b-afae-13eecf00e6c7)
+
+#กระบวนการ ETL in progress....
