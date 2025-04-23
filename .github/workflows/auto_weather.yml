@@ -3,7 +3,7 @@ name: Daily Weather Scripts
 # กำหนดเวลารันทุกวันเวลา 15:00 UTC (22:00 ไทย)
 on:
   schedule:
-    - cron: '33 15 * * *'
+    - cron: '38 15 * * *'
   workflow_dispatch:  # เพิ่มปุ่ม manual run บน GitHub ด้วย
 
 jobs:
