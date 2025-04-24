@@ -1,10 +1,10 @@
 name: Daily Weather Scripts
 
-# กำหนดเวลารันทุกวันเวลา 15:00 UTC (22:00 ไทย)
+# กำหนดเวลารันทุกวันเวลา 13:00 UTC (20:00 น. ไทย)
 on:
   schedule:
-    - cron: '0 13 * * *'  # ทุกวันเวลา 13:00 UTC (20:00 น. ไทย)
-  workflow_dispatch:  # เพิ่มปุ่ม manual run บน GitHub ด้วย
+    - cron: '0 13 * * *'
+  workflow_dispatch:
 
 jobs:
   run-python-scripts:
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'  # เปลี่ยนเป็นเวอร์ชันที่ต้องการ
+          python-version: '3.13'
 
       - name: Install dependencies
         run: |
@@ -28,4 +28,18 @@ jobs:
         run: python tmd.py
 
       - name: Run Weather_data.py
-        run: python Weather_data.py 
+        run: python Weather_data.py
+
+      - name: Create download directory
+        run: |
+          mkdir -p download  # สร้างโฟลเดอร์ download หากยังไม่มี
+
+      - name: Move CSV files to download folder
+        run: |
+          mv *.csv download/  # ย้ายไฟล์ CSV ไปยังโฟลเดอร์ download
+
+      - name: Upload CSV files
+        uses: actions/upload-artifact@v3
+        with:
+          name: weather-csvs
+          path: download/*.csv  # อัพโหลดไฟล์จากโฟลเดอร์ download
