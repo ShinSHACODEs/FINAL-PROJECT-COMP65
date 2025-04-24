@@ -38,8 +38,8 @@ jobs:
         run: |
           mv *.csv download/  # ย้ายไฟล์ CSV ไปยังโฟลเดอร์ download
 
-      - name: Upload CSV files
+      - name: Upload CSV files as artifact
         uses: actions/upload-artifact@v3
         with:
           name: weather-csvs
-          path: download/*.csv  # อัพโหลดไฟล์จากโฟลเดอร์ download
+          path: download/*.csv  # ระบุให้ชัดเจนว่าอัพโหลดไฟล์ CSV จากโฟลเดอร์ download
