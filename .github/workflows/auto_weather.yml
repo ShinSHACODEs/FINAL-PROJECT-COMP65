@@ -26,3 +26,8 @@ jobs:
 
       - name: Run Weather_data.py
         run: python Weather_data.py
+        
+      - name: Upload weatherdata.csv to Google Drive
+        env:
+          GOOGLE_DRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CREDENTIALS }} # ดึงจาก GitHub Secrets
+        run: python upload_to_drive.py
