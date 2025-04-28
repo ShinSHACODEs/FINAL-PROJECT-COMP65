@@ -28,7 +28,7 @@ jobs:
         run: python Weather_data.py
 
       - name: Upload CSV to Google Drive
-        uses: ridedott/google-drive-upload@v1
+        uses: adityak74/google-drive-upload-git-action@v0.3
         with:
           source: weatherdata.csv
           destination-folder-id: 1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC
