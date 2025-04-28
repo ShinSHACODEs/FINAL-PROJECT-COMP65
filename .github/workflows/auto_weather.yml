@@ -17,18 +17,20 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'  # เปลี่ยนเป็นเวอร์ชันที่ต้องการ
+          python-version: '3.13'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          
+
       - name: Run Weather_data.py
-        run: python Weather_data.py 
-        
+        run: python Weather_data.py
+
       - name: Upload CSV to Google Drive
-        run: |
-          python Weather_data.py 
-        env:
-          GOOGLE_DRIVE_CREDENTIALS: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+        uses: foosbyte/google-drive-upload@v1
+        with:
+          credentials_json: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+          file: 'weather_data.csv'  # ชื่อไฟล์ที่ต้องการอัปโหลด
+          folder_id: '1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC'  # ใส่ Folder ID ที่ต้องการอัปโหลดไป
+
