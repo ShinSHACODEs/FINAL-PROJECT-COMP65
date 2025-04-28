@@ -26,3 +26,9 @@ jobs:
           
       - name: Run Weather_data.py
         run: python Weather_data.py 
+        
+      - name: Upload CSV to Google Drive
+        run: |
+          python Weather_data.py 
+        env:
+          GOOGLE_DRIVE_CREDENTIALS: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
