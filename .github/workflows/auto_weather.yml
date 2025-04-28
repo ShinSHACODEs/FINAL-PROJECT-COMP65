@@ -26,11 +26,4 @@ jobs:
 
       - name: Run Weather_data.py
         run: python Weather_data.py
-
-      - name: Upload CSV to Google Drive
-        uses: google-github-actions/drive-upload@v0
-        with:
-          path: weatherdata.csv
-          destination: 1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC
-          credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
           
