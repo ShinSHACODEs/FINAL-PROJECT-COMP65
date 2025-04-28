@@ -28,12 +28,9 @@ jobs:
         run: python Weather_data.py
 
       - name: Upload CSV to Google Drive
-        uses: adityak74/google-drive-upload-git-action@v0.3
+        uses: google-github-actions/upload-cloud-storage@v0
         with:
           filename: weatherdata.csv
-          folderId: 1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC
-          credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
-          overwrite: true
-
-
+          bucket: 1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC
+          credentials_json: ${{ secrets.GDRIVE_CREDENTIALS }}
           
