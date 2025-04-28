@@ -26,10 +26,3 @@ jobs:
 
       - name: Run Weather_data.py
         run: python Weather_data.py
-
-      - name: Upload CSV to Google Drive
-        uses: willo32/google-drive-upload-action@v1
-        with:
-          credentials_json: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
-          file: 'weather_data.csv'  # ชื่อไฟล์ที่ต้องการอัปโหลด
-          parent_folder_id: 1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC
