@@ -1,29 +1,45 @@
-name: Daily Weather Scripts
+name: Daily Weather Scripts and Upload (Self-Made)
 
-# กำหนดเวลารันทุกวันเวลา 15:00 UTC (22:00 ไทย)
 on:
   schedule:
-    - cron: '0 13 * * *'  # ทุกวันเวลา 13:00 UTC (20:00 น. ไทย)
-  workflow_dispatch:  # เพิ่มปุ่ม manual run บน GitHub ด้วย
+    - cron: '0 13 * * *'
+  workflow_dispatch:
 
 jobs:
-  run-python-scripts:
+  run-and-upload:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.13'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run Weather_data.py
-        run: python Weather_data.py
-          
+    - name: Run Weather_data.py
+      run: python Weather_data.py
+
+    - name: Install gdrive
+      run: |
+        curl -L -o gdrive.tar.gz https://github.com/prasmussen/gdrive/releases/download/2.1.1/gdrive-linux-x64.tar.gz
+        tar -xvzf gdrive.tar.gz
+        chmod +x gdrive
+        sudo mv gdrive /usr/local/bin/gdrive
+
+    - name: Authenticate gdrive
+      run: |
+        echo "${{ secrets.GDRIVE_SERVICE_ACCOUNT }}" > service_account.json
+        gdrive about    # เช็คว่าเชื่อมต่อได้
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+
+    - name: Upload file to Google Drive
+      run: |
+        gdrive upload --parent 1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC public/output.csv
