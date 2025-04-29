@@ -1,0 +1,49 @@
+name: Update Weather Data to Google Drive
+
+on:
+  schedule:
+    - cron: '0 13 * * *'  # รันทุกๆ 6 ชั่วโมง
+  workflow_dispatch:  # ให้รันด้วยตัวเองได้ด้วย
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies from requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          
+      - name: Run weather data scraper
+        run: python Weather_data.py
+        
+      # ตั้งค่า Google Drive CLI (รูปแบบที่ง่ายกว่า)
+      - name: Setup rclone
+        uses: AnimMouse/setup-rclone@v1
+        
+      - name: Configure rclone
+        run: |
+          mkdir -p ~/.config/rclone/
+          echo '${{ secrets.RCLONE_CONFIG }}' > ~/.config/rclone/rclone.conf
+        
+      - name: Upload to Google Drive with rclone
+        run: |
+          rclone copy weatherdata.csv gdrive:My Drive/Project --no-traverse
+          echo "ไฟล์ถูกอัปโหลดไปยัง Google Drive เรียบร้อยแล้ว"
+        
+      # ยังคงเก็บไฟล์ใน GitHub ด้วยถ้าต้องการ
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add weatherdata.csv
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update weather data"
+          git push
