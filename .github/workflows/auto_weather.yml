@@ -32,6 +32,9 @@ jobs:
         chmod +x gdrive
         sudo mv gdrive /usr/local/bin/
 
+    - name: Verify gdrive installation
+      run: gdrive version
+
     - name: Authenticate gdrive
       run: |
         echo "${{ secrets.GDRIVE_SERVICE_ACCOUNT }}" > service_account.json
