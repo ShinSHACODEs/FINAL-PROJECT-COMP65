@@ -36,7 +36,7 @@ jobs:
         
       - name: Upload to Google Drive with rclone
         run: |
-          rclone copy weatherdata.csv gdrive:My Drive/Project --no-traverse
+          rclone copy weatherdata.csv "gdrive:My Drive/Project" --no-traverse
           echo "ไฟล์ถูกอัปโหลดไปยัง Google Drive เรียบร้อยแล้ว"
         
       # ยังคงเก็บไฟล์ใน GitHub ด้วยถ้าต้องการ
