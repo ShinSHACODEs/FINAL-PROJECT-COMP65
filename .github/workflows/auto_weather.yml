@@ -28,12 +28,14 @@ jobs:
 
     - name: Install gdrive
       run: |
-        curl -L -o gdrive https://github.com/prasmussen/gdrive/releases/download/2.1.1/gdrive-linux-x64
+        curl -L -o gdrive https://github.com/prasmussen/gdrive/releases/download/2.1.1/gdrive-linux-x64-2.1.1
         chmod +x gdrive
         sudo mv gdrive /usr/local/bin/
 
     - name: Verify gdrive installation
-      run: gdrive version
+      run: |
+        which gdrive
+        gdrive version
 
     - name: Authenticate gdrive
       run: |
