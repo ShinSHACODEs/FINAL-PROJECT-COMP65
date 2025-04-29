@@ -25,32 +25,4 @@ jobs:
 
     - name: Run your script
       run: python Weather_data.py
-
-    - name: Upload CSV to Google Drive
-      env:
-        SERVICE_ACCOUNT_JSON: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
-      run: |
-        echo "$SERVICE_ACCOUNT_JSON" > service_account.json
-
-        python <<EOF
         
-import json
-from pydrive2.auth import GoogleAuth
-from pydrive2.drive import GoogleDrive
-
-# Auth
-gauth = GoogleAuth()
-gauth.settings['client_config_backend'] = 'service'
-gauth.settings['service_config'] = {
-    'client_json_file_path': 'service_account.json'
-}
-gauth.ServiceAuth()
-drive = GoogleDrive(gauth)
-
-# Upload file
-gfile = drive.CreateFile({'parents': [{'id': '1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC'}]})
-gfile.SetContentFile('public/output.csv')
-gfile.Upload()
-
-print("Upload Successful!")
-EOF
