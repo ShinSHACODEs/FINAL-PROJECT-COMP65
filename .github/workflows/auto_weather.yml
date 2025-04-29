@@ -28,10 +28,9 @@ jobs:
 
     - name: Install gdrive
       run: |
-        curl -L -o gdrive.tar.gz https://github.com/prasmussen/gdrive/releases/download/2.1.1/gdrive-linux-x64.tar.gz
-        tar -xvzf gdrive.tar.gz
+        curl -L -o gdrive https://github.com/prasmussen/gdrive/releases/download/2.1.1/gdrive-linux-x64
         chmod +x gdrive
-        sudo mv gdrive /usr/local/bin/gdrive
+        sudo mv gdrive /usr/local/bin/
 
     - name: Authenticate gdrive
       run: |
