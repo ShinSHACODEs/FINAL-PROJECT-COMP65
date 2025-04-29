@@ -32,4 +32,3 @@ jobs:
           name: weatherdata.csv
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
-          encoded: true  # ถ้า credentials เป็น base64 encoded
