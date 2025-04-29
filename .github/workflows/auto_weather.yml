@@ -24,21 +24,7 @@ jobs:
           
       - name: Run weather data scraper
         run: python Weather_data.py
-        
-      # ตั้งค่า Google Drive CLI (รูปแบบที่ง่ายกว่า)
-      - name: Setup rclone
-        uses: AnimMouse/setup-rclone@v1
-        
-      - name: Configure rclone
-        run: |
-          mkdir -p ~/.config/rclone/
-          echo '${{ secrets.RCLONE_CONFIG }}' > ~/.config/rclone/rclone.conf
-        
-      - name: Upload to Google Drive with rclone
-        run: |
-          rclone copy weatherdata.csv gdrive:1oG1TA6wzl4J45lyCieeoPCj8SDEqgnYC --no-traverse
-          echo "ไฟล์ถูกอัปโหลดไปยัง Google Drive เรียบร้อยแล้ว"
-        
+    
       # ยังคงเก็บไฟล์ใน GitHub ด้วยถ้าต้องการ
       - name: Commit and push if changed
         run: |
