@@ -29,19 +29,13 @@ jobs:
     - name: Clean up previous gdrive installation
       run: |
         sudo rm -f /usr/local/bin/gdrive
-
+    
     - name: Install gdrive
       run: |
-        curl -L https://github.com/prasmussen/gdrive/releases/download/2.1.1/gdrive-linux-x64 -o gdrive
-        chmod +x gdrive
-        sudo mv gdrive /usr/local/bin/
-
-    - name: Verify gdrive installation
-      run: |
-        ls -l /usr/local/bin/gdrive
-        which gdrive
-        gdrive version
-
+        curl -L https://github.com/prasmussen/gdrive/releases/download/2.1.1/gdrive-linux-x64 -o /tmp/gdrive
+        chmod +x /tmp/gdrive
+        sudo mv /tmp/gdrive /usr/local/bin/gdrive   
+        
     - name: Authenticate gdrive
       run: |
         echo "${{ secrets.GDRIVE_SERVICE_ACCOUNT }}" > service_account.json
