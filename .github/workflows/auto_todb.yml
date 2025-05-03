@@ -23,3 +23,10 @@ jobs:
            
        - name: Run weather data scraper
          run: python Weather_data.py
+
+       - name: Upload CSV to Firestore
+         env:
+             FIREBASE_CREDENTIALS: ${{ secrets.DB_SERVICE_ACCOUTKEY }}
+         run: |
+             echo "$DB_SERVICE_ACCOUTKEY" > firebase-key.json
+             node upload-to-firestore.js
