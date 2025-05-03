@@ -15,7 +15,6 @@ def tmd():
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--user-data-dir=./chrome_profile")
 
     driver = webdriver.Chrome(options=options)
     url = "https://www.tmd.go.th/climate/daily"
