@@ -26,7 +26,17 @@ jobs:
 
       - name: Download file from Google Drive
         run: |
-          gread https://drive.google.com/drive/folders/${{ secrets.FOLDER_ID }}/
+          gdown https://drive.google.com/uc?id=${{ secrets.FILE_ID }}  # Use file ID to download CSV
+
+      - name: Read existing weather data (if available)
+        run: |
+          if [ -f "weatherdata.csv" ]; then
+            echo "File weatherdata.csv found. Reading data..."
+            # Add Python code to read the CSV file, if needed
+            python -c "import pandas as pd; df = pd.read_csv('weatherdata.csv'); print(df.head())"
+          else
+            echo "No existing data found. Continuing with the scraping process..."
+          fi
 
       - name: Run weather data scraper
         run: python Weather_data.py
