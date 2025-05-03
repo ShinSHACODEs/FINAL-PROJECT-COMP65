@@ -24,18 +24,18 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install gdown
 
-      - name: Download file from Google Drive
+      - name: Download weather data CSV from Google Drive
         run: |
-          gdown https://drive.google.com/uc?id=${{ secrets.FILE_ID }}  # Use file ID to download CSV
+          gdown https://drive.google.com/uc?id=${{ secrets.FOLDER_ID }} 
 
-      - name: Read existing weather data (if available)
+      - name: Read existing weather data from Google Drive (if available)
         run: |
-          if [ -f "weatherdata.csv" ]; then
-            echo "File weatherdata.csv found. Reading data..."
+          if [ -f "./weatherdata.csv" ]; then
+            echo "File weatherdata.csv found on Google Drive. Reading data..."
             # Add Python code to read the CSV file, if needed
             python -c "import pandas as pd; df = pd.read_csv('weatherdata.csv'); print(df.head())"
           else
-            echo "No existing data found. Continuing with the scraping process..."
+            echo "No existing data found on Google Drive. Continuing with the scraping process..."
           fi
 
       - name: Run weather data scraper
