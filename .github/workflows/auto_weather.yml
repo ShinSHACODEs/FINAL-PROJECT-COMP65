@@ -22,7 +22,7 @@ jobs:
            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
            
        - name: Download weather.csv from Google Drive
-         uses: google-drive-download-action@v1  
+         uses: raeperd/raeperd/google-drive-download-action@v1.0
          with:
            file_id: ${{ secrets.GDRIVE_FILE_ID }}  
            destination: ./weather.csv  
