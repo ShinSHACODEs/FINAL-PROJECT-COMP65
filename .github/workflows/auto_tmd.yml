@@ -22,14 +22,14 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           
-      - name: Run TMD data scraper
+      - name: Run weather data scraper
         run: python tmd.py
 
       - name: Upload to Google Drive
         uses: mathisve/gdrive-upload-action@main
         with:
           filename: ./TMDdata.csv
-          name: TMDdata_update.csv
+          name: TMDdata.csv
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
           encoded: false
