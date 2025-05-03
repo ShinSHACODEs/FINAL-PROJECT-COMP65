@@ -21,12 +21,13 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Download file Google Drive to default (./) directory
-        uses: k0staa/download-gdrive-file-action@v1
+      - name: Download file
+        uses: playeveryware/action-google-drive-download@v1
         with:
-          service-account-auth-json: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
-          download-file-name: weatherdata.csv
-
+          token: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          file-url: ${{ secrets.FOLDER_ID }}
+          path: test.bin
+          
       - name: Run weather data scraper
         run: python Weather_data.py
 
