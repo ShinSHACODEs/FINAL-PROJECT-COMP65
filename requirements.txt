@@ -2,3 +2,7 @@ requests
 beautifulsoup4
 pandas
 bs4
+os
+time
+selenium
+datetime
