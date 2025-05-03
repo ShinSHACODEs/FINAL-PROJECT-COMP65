@@ -1,9 +1,8 @@
 name: Update Weather Data to Google Drive
-
 on:
   schedule:
-    - cron: '0 13 * * *'  # Run every 6 hours
-  workflow_dispatch:  # Allow manual triggering
+    - cron: '0 13 * * *'  
+  workflow_dispatch:  
 
 jobs:
   update-data:
@@ -22,22 +21,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install gdown
-
-      - name: Download weather data CSV from Google Drive
-        run: |
-          gdown https://drive.google.com/${{ secrets.FOLDER_ID }} 
-
-      - name: Read existing weather data from Google Drive (if available)
-        run: |
-          if [ -f "./weatherdata.csv" ]; then
-            echo "File weatherdata.csv found on Google Drive. Reading data..."
-            # Add Python code to read the CSV file, if needed
-            python -c "import pandas as pd; df = pd.read_csv('weatherdata.csv'); print(df.head())"
-          else
-            echo "No existing data found on Google Drive. Continuing with the scraping process..."
-          fi
-
+          
+      - name: Read file contents
+        uses: guibranco/github-file-reader-action-v2@latest
+        id: read_file
+        with:
+          path: "Data/weatherdata.csv"
+          
       - name: Run weather data scraper
         run: python Weather_data.py
 
