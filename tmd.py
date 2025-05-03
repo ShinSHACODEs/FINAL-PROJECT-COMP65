@@ -24,12 +24,12 @@ def tmd():
         # รอให้โหลดตาราง
         WebDriverWait(driver, 30).until(EC.presence_of_element_located(
             (By.XPATH, '//table[contains(@class, "table")]')))
+        time.sleep(5)  # เผื่อโหลดช้า เพิ่ม buffer
 
         climate_data = driver.find_elements(By.XPATH, '//table[contains(@class, "table")]/tbody/tr')
         yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
         rows = []
 
-        # ประมวลผลข้อมูลจากตาราง
         for data in climate_data:
             columns = data.find_elements(By.TAG_NAME, "td")
             row = [col.text.strip() for col in columns]
@@ -37,16 +37,26 @@ def tmd():
                 row.append(yesterday)
                 rows.append(row)
 
-        # สร้าง DataFrame ใหม่
         df_new = pd.DataFrame(rows, columns=[
             "สถานีอุตุนิยมวิทยา", "อุณหภูมิสูงสุด", "อุณหภูมิต่ำสุด", "ทิศ",
             "ความเร็ว (กม./ชม.)", "เวลา", "ปริมาณฝน มม.", "รวมตั้งแต่ต้นปี", "วันที่"
         ])
 
         file_path = "TMDdata.csv"
-        df_new.to_csv(file_path, index=False, encoding="utf-8-sig")
-        print("บันทึกข้อมูลสำเร็จ:", file_path)
+        if os.path.exists(file_path):
+            df_existing = pd.read_csv(file_path, encoding="utf-8-sig")
+            if any((df_existing["วันที่"] == yesterday) & (df_existing["สถานีอุตุนิยมวิทยา"].isin(df_new["สถานีอุตุนิยมวิทยา"]))):
+                print("ข้อมูลของเมื่อวานมีอยู่แล้ว ไม่ต้องบันทึก")
+                driver.quit()
+                return
+            df_combined = pd.concat([df_existing, df_new], ignore_index=True).drop_duplicates(
+                subset=["สถานีอุตุนิยมวิทยา", "วันที่"], keep="last")
+        else:
+            df_combined = df_new
 
+        df_combined.to_csv(file_path, index=False, encoding="utf-8-sig")
+        print("บันทึกข้อมูลสำเร็จ:", file_path)
+        
     finally:
         driver.quit()
 
