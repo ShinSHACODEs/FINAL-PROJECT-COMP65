@@ -21,6 +21,12 @@ jobs:
            python -m pip install --upgrade pip
            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
            
+       - name: Download weather.csv from Google Drive
+         uses: google-drive-download-action@v1  
+         with:
+           file_id: ${{ secrets.GDRIVE_FILE_ID }}  
+           destination: ./weather.csv  
+
        - name: Run weather data scraper
          run: python Weather_data.py
          
