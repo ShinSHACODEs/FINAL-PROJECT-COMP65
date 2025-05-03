@@ -4,3 +4,5 @@ pandas
 bs4
 pandas
 selenium
+io
+shutil
