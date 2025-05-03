@@ -26,8 +26,7 @@ jobs:
 
       - name: Download file from Google Drive
         run: |
-          gdown https://drive.google.com/drive/folders/${{ secrets.FOLDER_ID }} -O weatherdata.csv
-          ls -la
+          gread https://drive.google.com/drive/folders/${{ secrets.FOLDER_ID }}/
 
       - name: Run weather data scraper
         run: python Weather_data.py
