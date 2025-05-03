@@ -1,4 +1,4 @@
-name: Update Weather Data to Google Drive
+name: Update Weather Data to Firestore
 on:
    schedule:
      - cron: '0 13 * * *'  # รันทุกๆ 6 ชั่วโมง
