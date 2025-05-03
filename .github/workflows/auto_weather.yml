@@ -26,7 +26,7 @@ jobs:
 
       - name: Download weather data CSV from Google Drive
         run: |
-          gdown https://drive.google.com/uc?id=${{ secrets.FOLDER_ID }} 
+          gdown https://drive.google.com/${{ secrets.FOLDER_ID }} 
 
       - name: Read existing weather data from Google Drive (if available)
         run: |
