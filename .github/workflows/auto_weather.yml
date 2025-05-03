@@ -22,12 +22,6 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           
-      - name: Read file contents
-        uses: guibranco/github-file-reader-action-v2@latest
-        id: read_file
-        with:
-          path: "Data/weatherdata.csv"
-          
       - name: Run weather data scraper
         run: python Weather_data.py
 
