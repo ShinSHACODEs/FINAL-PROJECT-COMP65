@@ -29,7 +29,7 @@ jobs:
         uses: mathisve/gdrive-upload-action@main
         with:
           filename: ./weatherdata.csv
-          name: weatherdata.csv
+          name: weatherdata_update.csv
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
           encoded: false
