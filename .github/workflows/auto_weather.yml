@@ -26,7 +26,7 @@ jobs:
 
       - name: Download existing CSV from Google Drive
         env:
-          GDRIVE_FILE_ID: ${{ secrets.ID_WEATHERDATA }}
+          GDRIVE_FILE_ID: 1HPsw-CoL8XvugOuJYFuMetuxVBHyApSw
         run: |
           echo "Downloading weatherdata.csv from Google Drive..."
           gdown https://drive.google.com/uc?id=$GDRIVE_FILE_ID -O weatherdata.csv
