@@ -8,7 +8,7 @@ import gdown
 file_id = os.environ.get("ID_WEATHERDATA")
 url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "weatherdata.csv", quiet=False)
-df = pd.read_csv("weatherdata.csv.csv")
+df = pd.read_csv("weatherdata.csv")
 print(df.head())
 
 def weather():
