@@ -24,7 +24,7 @@ jobs:
           
       - name: Download data from Google Drive
         run: |
-          file_id="1OGcwxYAaBsL0CQlucI6nxc6HSoT3NtLB"
+          file_id = 1OGcwxYAaBsL0CQlucI6nxc6HSoT3NtLB
           url="https://drive.google.com/uc?id=${file_id}"
           gdown.download(url, "TMDdata.csv", quiet=False)
 
