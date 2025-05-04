@@ -31,7 +31,7 @@ jobs:
           echo "Downloading weatherdata.csv from Google Drive..."
           gdown https://drive.google.com/uc?id=$GDRIVE_FILE_ID -O weatherdata.csv
 
-      - name: Run weather data scraper
+      - name: Run tmd data scraper
         run: python Weather_data.py
 
       - name: Upload updated CSV to Google Drive
