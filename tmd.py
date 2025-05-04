@@ -62,4 +62,3 @@ def tmd():
     print("บันทึกข้อมูลสำเร็จ:", file_path)
 
 tmd()
-
