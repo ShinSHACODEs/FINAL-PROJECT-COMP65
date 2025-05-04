@@ -18,12 +18,18 @@ def tmd():
 
     yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
 
-    for table in tables:
-        for row in table.find_all('tr'):
-            cells = row.find_all('td')
-            row_data = [cell.get_text(strip=True) for cell in cells]
+   for table in tables:
+    for row in table.find_all('tr'):
+        cells = row.find_all('td')
+        row_data = [cell.get_text(strip=True) for cell in cells]
+        if row_data and row_data[0] != 'กำลังโหลดข้อมูล...':
+            # ตรวจสอบว่ามีกี่ช่อง
+            if len(row_data) < 8:
+                row_data += [None] * (8 - len(row_data))
+            elif len(row_data) > 8:
+                row_data = row_data[:8]
             rows.append(row_data)
-
+            
     columns = [
         "สถานีอุตุนิยมวิทยา", "อุณหภูมิสูงสุด", "อุณหภูมิต่ำสุด", "ทิศ",
         "ความเร็ว (กม./ชม.)", "เวลา", "ปริมาณฝน มม.", "รวมตั้งแต่ต้นปี"
