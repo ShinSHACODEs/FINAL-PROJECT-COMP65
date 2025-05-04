@@ -38,7 +38,7 @@ def tmd():
     df_new["วันที่"] = yesterday
     print(df_new)
     
-    file_id = "1e421mydwndQDaCaNDCkEt6468HBLS72H"
+    file_id = "16YaoLa0RNTqnQQ-kcyg2jA8Q2OCVneSq"
     url = f"https://drive.google.com/uc?id={file_id}"
     gdown.download(url, "TMDdata.csv", quiet=False)
     df_old = "TMDdata.csv"
