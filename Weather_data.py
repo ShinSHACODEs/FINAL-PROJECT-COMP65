@@ -39,7 +39,7 @@ def weather():
      if os.path.exists(file_path):
          df_existing = pd.read_csv(file_path, encoding="utf-8-sig")
          df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-         df_combined.to_csv(file_path, index=False, encoding="utf-8-sig", quoting=csv.QUOTE_MINIMAL))
+         df_combined.to_csv(file_path, index=False, encoding="utf-8-sig", quoting=csv.QUOTE_MINIMAL)
          print("ข้อมูลถูกรวมและบันทึกลงไฟล์แล้ว:")
          print(df_combined)
      else:
