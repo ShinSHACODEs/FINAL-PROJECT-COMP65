@@ -7,7 +7,7 @@ import gdown
 import csv
 
 
-file_id = "1HPsw-CoL8XvugOuJYFuMetuxVBHyApSw"
+file_id = "16fyusR1Sg_L-h7q6nXtquOwoCD2Ca_Px"
 url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "weatherdata.csv", quiet=False)
 df = pd.read_csv("weatherdata.csv")
@@ -39,7 +39,7 @@ def weather():
      if os.path.exists(file_path):
          df_existing = pd.read_csv(file_path, encoding="utf-8-sig")
          df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-         df_combined.to_csv(file_path, index=False, encoding="utf-8-sig", quoting=csv.QUOTE_ALL)
+         df_combined.to_csv(file_path, index=False, encoding="utf-8-sig")
          print("ข้อมูลถูกรวมและบันทึกลงไฟล์แล้ว:")
          print(df_combined)
      else:
