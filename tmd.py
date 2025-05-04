@@ -23,25 +23,30 @@ def tmd():
     rows = []
     yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
     
-    #ส่วนดึงข้างใน table
+    # ดึงข้อมูลจากแต่ละ table
     for table in tables:
         rows_in_table = table.find_all('tr')
         for row in rows_in_table:
             cells = row.find_all('td')
-            row_data = [cell.get_text(strip=True) for cell in cells] # ดึง text ออกมา cell
-            if row_data and row_data[0] != 'กำลังโหลดข้อมูล...':
-                row_data.append(yesterday)
+            row_data = [cell.get_text(strip=True) for cell in cells]
+            if row_data and row_data[0] != 'กำลังโหลดข้อมูล...' and len(row_data) == 8:
                 rows.append(row_data)
     browser.quit()
     
     columns = [
         "สถานีอุตุนิยมวิทยา", "อุณหภูมิสูงสุด", "อุณหภูมิต่ำสุด", "ทิศ",
-        "ความเร็ว (กม./ชม.)", "เวลา", "ปริมาณฝน มม.", "รวมตั้งแต่ต้นปี", "วันที่"
+        "ความเร็ว (กม./ชม.)", "เวลา", "ปริมาณฝน มม.", "รวมตั้งแต่ต้นปี"
     ]
+    
     df_new = pd.DataFrame(rows, columns=columns)
+    
+    # เพิ่มคอลัมน์ 'วันที่' ทีหลัง
+    df_new["วันที่"] = yesterday
+
+    # ถ้าจำเป็นต้องลบแถวบางแถว (กำหนด index ตามต้องการ)
     if len(df_new) > 0:
-        df_new = df_new.drop(index=[])
-     
+        df_new = df_new.drop(index=[])  # ยังไม่ลบแถวใด
+    
     file_path = "TMDdata.csv"
     if os.path.exists(file_path):
         df_existing = pd.read_csv(file_path, encoding="utf-8-sig")
@@ -59,3 +64,4 @@ def tmd():
     print("บันทึกข้อมูลสำเร็จ:", file_path)
 
 tmd()
+
