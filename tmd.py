@@ -6,6 +6,10 @@ from datetime import datetime, timedelta
 import os
 import gdown
 
+file_id = "1OGcwxYAaBsL0CQlucI6nxc6HSoT3NtLB"
+url = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url, "TMDdata.csv", quiet=False)
+
 def tmd():
     url = "https://www.tmd.go.th/climate/daily"
     browser = start_firefox(url, headless=True)
