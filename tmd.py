@@ -36,9 +36,6 @@ def tmd():
             if len(row) == 8:
                 row.append(yesterday)
                 rows.append(row)
-        if not rows:
-            print("ไม่มีรายงานสภาพอากาศสำหรับเมื่อวาน")
-            return
 
         df_new = pd.DataFrame(rows, columns=[
             "สถานีอุตุนิยมวิทยา", "อุณหภูมิสูงสุด", "อุณหภูมิต่ำสุด", "ทิศ",
