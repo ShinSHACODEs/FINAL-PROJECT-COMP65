@@ -2,7 +2,7 @@ name: Update TMD Data to Google Drive
 
 on:
   schedule:
-    - cron: '0 13 * * *'  # รันทุกวันเวลา 13:00 UTC
+    - cron: '0 13 * * *'  # รันทุกวันเวลา 13:00 UTC (20:00 เวลาไทย)
   workflow_dispatch:
 
 jobs:
@@ -23,8 +23,22 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: Download previous CSV from artifact (if exists)
+        continue-on-error: true  # ไม่หยุดถ้ายังไม่มี artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tmd-csv-artifact
+          path: artifact_data
+
       - name: Run weather data scraper
         run: python tmd.py
+
+      - name: Upload updated CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tmd-csv-artifact
+          path: TMDdata.csv
+          retention-days: 1  # เก็บแค่วันเดียวก็พอ
 
       - name: Upload to Google Drive
         uses: mathisve/gdrive-upload-action@main
