@@ -21,7 +21,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          
+      - name: Download data from Google Drive
+        run: |
+          file_id="1OGcwxYAaBsL0CQlucI6nxc6HSoT3NtLB"
+          url="https://drive.google.com/uc?id=${file_id}"
+          gdown.download(url, "TMDdata.csv", quiet=False)
 
+      - name: Read CSV file and run the script
+        run: |
+          python -c "
+          import pandas as pd
+          df_existing = pd.read_csv('TMDdata.csv', encoding='utf-8-sig')
+          print(df_existing.head())  # หรือการอ่านข้อมูลที่ต้องการทำ
+          "
       - name: Run weather data scraper
         run: python tmd.py
 
