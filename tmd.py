@@ -4,6 +4,13 @@ import pandas as pd
 import time
 from datetime import datetime, timedelta
 import os
+import gdown
+
+file_id = "1O2HqNcX77-uGv8BL05AmFtxxFqqe0qPE"
+url = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url, "TMDdata.csv", quiet=False)
+df = pd.read_csv("TMDdata.csv")
+print(df.head())
 
 def tmd():
     url = "https://www.tmd.go.th/climate/daily"
