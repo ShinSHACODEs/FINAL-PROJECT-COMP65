@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 import gdown
 
-file_id = ${{ secrets.WEATHER_SECRET_KEY }}
+file_id = os.environ.get("WEATHER_SECRET_KEY")
 url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "weatherdata.csv.csv", quiet=False)
 df = pd.read_csv("weatherdata.csv.csv")
