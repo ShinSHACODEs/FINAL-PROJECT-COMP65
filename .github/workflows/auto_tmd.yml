@@ -23,18 +23,6 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Download existing CSV from Google Drive
-        env:
-          GDRIVE_FILE_ID: 1OGcwxYAaBsL0CQlucI6nxc6HSoT3NtLB
-        run: |
-          echo "Downloading TMDdata.csv from Google Drive..."
-          gdown https://drive.google.com/uc?id=$GDRIVE_FILE_ID -O TMDdata.csv
-
-      - name: Preview downloaded CSV
-        run: |
-          echo "Preview first few lines of TMDdata.csv:"
-          head -n 5 TMDdata.csv
-
       - name: Run weather data scraper
         run: python tmd.py
 
