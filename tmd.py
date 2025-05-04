@@ -24,7 +24,7 @@ def tmd():
         # รอให้โหลดตาราง
         WebDriverWait(driver, 30).until(EC.presence_of_element_located(
             (By.XPATH, '//table[contains(@class, "table")]')))
-        time.sleep(5)  # เผื่อโหลดช้า เพิ่ม buffer
+        time.sleep(15)  # เผื่อโหลดช้า เพิ่ม buffer
 
         climate_data = driver.find_elements(By.XPATH, '//table[contains(@class, "table")]/tbody/tr')
         yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
