@@ -43,9 +43,9 @@ def tmd():
     gdown.download(url2, "TMDdata.csv", quiet=False)
     df_old = "TMDdata.csv"
     
-     if os.path.exists("TMDdata.csv"):
+     if os.path.exists("url2"):
         try:
-            df_old = pd.read_csv("TMDdata.csv", encoding="utf-8-sig")
+            df_old = pd.read_csv("url2", encoding="utf-8-sig")
         except Exception as e:
             print(f"ไม่สามารถอ่านไฟล์ได้: {e}")
             return
