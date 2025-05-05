@@ -38,38 +38,30 @@ def tmd():
     df_new["วันที่"] = yesterday
     print(df_new)
     
+    # อ่านไฟล์เก่า
     file_id = "16YaoLa0RNTqnQQ-kcyg2jA8Q2OCVneSq"
     url2 = f"https://drive.google.com/uc?id={file_id}"
     gdown.download(url2, "TMDdata.csv", quiet=False)
     df_old = "TMDdata.csv"
     
-     if os.path.exists("url2"):
-        try:
-            df_old = pd.read_csv("url2", encoding="utf-8-sig")
-        except Exception as e:
-            print(f"ไม่สามารถอ่านไฟล์ได้: {e}")
-            return
-
-        # ตรวจสอบข้อมูลซ้ำ
+    if os.path.exists(df_old):
+        df_old = pd.read_csv(df_old, encoding="utf-8-sig")
+        
         is_duplicate = df_old.merge(
-            df_new[["สถานีอุตุนิยมวิทยา", "วันที่"]],
-            on=["สถานีอุตุนิยมวิทยา", "วันที่"],
-            how="inner"
-        )
+                    df_new[["สถานีอุตุนิยมวิทยา", "วันที่"]],
+                    on=["สถานีอุตุนิยมวิทยา", "วันที่"],
+                    how="inner"
+                )
         if not is_duplicate.empty:
             print("ข้อมูลของเมื่อวานมีอยู่แล้ว ไม่ต้องบันทึก")
             return
     else:
-        # ถ้าไม่มี df_old ให้ตั้งค่าเป็น DataFrame ว่าง
         df_old = pd.DataFrame()
-
-    # รวมข้อมูลและลบข้อมูลที่ซ้ำ
+        
     df_combined = pd.concat([df_old, df_new], ignore_index=True).drop_duplicates(
-        subset=["สถานีอุตุนิยมวิทยา", "วันที่"], keep="last"
+    subset=["สถานีอุตุนิยมวิทยา", "วันที่"], keep="last"
     )
-
-    # บันทึกข้อมูลใหม่ลงในไฟล์
-    df_combined.to_csv("TMDdata.csv", index=False, encoding="utf-8-sig")
+    df_combined.to_csv(index=False, encoding="utf-8-sig"
+    )
     print("บันทึกข้อมูลสำเร็จ")
-
 tmd()
