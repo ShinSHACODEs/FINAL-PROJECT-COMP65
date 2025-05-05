@@ -61,7 +61,7 @@ def tmd():
     df_combined = pd.concat([df_old, df_new], ignore_index=True).drop_duplicates(
     subset=["สถานีอุตุนิยมวิทยา", "วันที่"], keep="last"
     )
-    df_combined.to_csv("TMDdata.csv", index=False, encoding="utf-8-sig")
+    df_combined.to_csv("TMDdata.csv", index=False, encoding="utf-8-sig"
     )
     print("บันทึกข้อมูลสำเร็จ")
 tmd()
