@@ -9,7 +9,7 @@ import os
 def tmd():
     url = "https://www.tmd.go.th/climate/daily"
     browser = start_firefox(url, headless=True)
-    time.sleep(5)  # รอให้โหลดเสร็จ
+    time.sleep(15)  # รอให้โหลดเสร็จ
     soup = BeautifulSoup(browser.page_source, 'html.parser')
     browser.quit()
 
