@@ -39,26 +39,26 @@ def tmd():
     print(df_new)
     
     file_id = "16YaoLa0RNTqnQQ-kcyg2jA8Q2OCVneSq"
-    url = f"https://drive.google.com/uc?id={file_id}"
-    gdown.download(url, "TMDdata.csv", quiet=False)
+    url2 = f"https://drive.google.com/uc?id={file_id}"
+    gdown.download(url2, "TMDdata.csv", quiet=False)
     df_old = "TMDdata.csv"
     
     if os.path.exists(df_old):
-        df_old = pd.read_csv(url, encoding="utf-8-sig")
+        df_old = pd.read_csv("TMDdata.csv", encoding="utf-8-sig")
         
         is_duplicate = df_old.merge(
                     df_new[["สถานีอุตุนิยมวิทยา", "วันที่"]],
                     on=["สถานีอุตุนิยมวิทยา", "วันที่"],
                     how="inner"
                 )
-        
         if not is_duplicate.empty:
             print("ข้อมูลของเมื่อวานมีอยู่แล้ว ไม่ต้องบันทึก")
             return
-    else:    
+    else:
         df_combined = pd.concat([df_old, df_new], ignore_index=True).drop_duplicates(
-        subset=["สถานีอุตุนิยมวิทยา", "วันที่"], keep="last")
-        
-    df_combined.to_csv(index=False, encoding="utf-8-sig")
-    print("บันทึกข้อมูลสำเร็จ")
+        subset=["สถานีอุตุนิยมวิทยา", "วันที่"], keep="last"
+        )
+        df_combined.to_csv(index=False, encoding="utf-8-sig"
+        )
+        print("บันทึกข้อมูลสำเร็จ")
 tmd()
