@@ -3,6 +3,7 @@ import pandas as pd
 import io
 import shutil
 import os
+import gdown
 
 def comapper():
     url = "https://api.carbonmapper.org/api/v1/catalog/plume-csv"
@@ -27,9 +28,12 @@ def readcsv():
         df.drop(columns=columns_to_drop, inplace=True)
         df.drop_duplicates(inplace=True)
 
-        os.remove('plume_data.csv')
-
+                # อ่านไฟล์เก่า
+        file_id = "1avgQR_ZpHmsLILLQUpdwKMAXt1aNEsTP"
+        url2 = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url2, "plume_data_cleaned.csv", quiet=False)
         cleaned_file = 'plume_data_cleaned.csv'
+        
         if os.path.exists(cleaned_file):
             existing_df = pd.read_csv(cleaned_file)
             combined_df = pd.concat([existing_df, df]).drop_duplicates()
