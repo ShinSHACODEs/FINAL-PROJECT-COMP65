@@ -29,7 +29,7 @@ def readcsv():
         df.drop_duplicates(inplace=True)
 
                 # อ่านไฟล์เก่า
-        file_id = "1avgQR_ZpHmsLILLQUpdwKMAXt1aNEsTP"
+        file_id = "1firkoPurXa3avZuVoafBgBs8S9mXNuyf"
         url2 = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url2, "plume_data_cleaned.csv", quiet=False)
         cleaned_file = 'plume_data_cleaned.csv'
