@@ -1,41 +1,48 @@
-import os, time, pandas as pd
-from selenium import webdriver
+import os
+import pandas as pd
+import requests
 
-def urlCarMo():
-    # ตั้งค่า WebDriver
+def download_carbon_monitor_csv():
+    url = "https://datas.carbonmonitor.org/API/downloadFullDataset.php?source=carbon_global"
     download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option("prefs", {"download.default_directory": download_folder})
-    driver = webdriver.Chrome(options=options)
-    driver.get("https://datas.carbonmonitor.org/API/downloadFullDataset.php?source=carbon_global")
-    time.sleep(15)
-    driver.quit()
+    os.makedirs(download_folder, exist_ok=True)
+    
+    filename = os.path.join(download_folder, "carbonmonitor_download.csv")
 
-    # หาไฟล์ล่าสุด
-    files = [f for f in os.listdir(download_folder) if f.startswith("carbonmonitor")]
-    files.sort(key=lambda f: os.path.getctime(os.path.join(download_folder, f)), reverse=True)
-    latest = os.path.join(download_folder, files[0])
+    # ดาวน์โหลดไฟล์
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(filename, "wb") as f:
+            f.write(response.content)
+        print(f"ดาวน์โหลดสำเร็จ: {filename}")
+    else:
+        print(f"ดาวน์โหลดล้มเหลว: รหัส {response.status_code}")
+        return
 
-    # โหลดและลบคอลัมน์ Unnamed
-    df_new = pd.read_csv(latest).drop(columns=lambda c: c.startswith("Unnamed: 4"), errors='ignore')
+    # อ่านไฟล์ที่โหลดมาใหม่
+    df_new = pd.read_csv(filename)
+
+    # ลบคอลัมน์ที่ไม่ต้องการ เช่น Unnamed
+    df_new = df_new.drop(columns=lambda c: c.startswith("Unnamed"), errors='ignore')
+
     dest = os.path.join(os.getcwd(), "carbon_monitor.csv")
 
+    # รวมข้อมูลใหม่กับเก่า ถ้ามีไฟล์เดิมอยู่แล้ว
     if os.path.exists(dest):
         df_old = pd.read_csv(dest)
         df_combined = pd.concat([df_old, df_new]).drop_duplicates(ignore_index=True)
 
-        # ถ้าไม่มีการเปลี่ยนแปลงในข้อมูล
         if df_combined.shape[0] == df_old.shape[0]:
             print("ข้อมูลไม่เปลี่ยนแปลง!")
-            os.remove(latest)  # ลบไฟล์ใหม่
+            os.remove(filename)
             return
     else:
         df_combined = df_new
 
-    # บันทึกข้อมูลที่รวมลงในไฟล์
+    # บันทึกข้อมูล
     df_combined.to_csv(dest, index=False)
     print(f"ข้อมูลบันทึกที่: {dest}")
-    os.remove(latest)
-    print(f"ลบไฟล์ดาวน์โหลดแล้ว: {latest}")
+    os.remove(filename)
+    print(f"ลบไฟล์ดาวน์โหลดแล้ว: {filename}")
 
-urlCarMo()
+download_carbon_monitor_csv()
