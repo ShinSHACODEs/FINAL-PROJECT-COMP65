@@ -2,6 +2,12 @@ import os
 import pandas as pd
 import requests
 
+file_id = "1DVzfrI9hYsJFGzt5LrwFiOZUsNn3snI1"
+url = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url, "carbon_monitor.csv", quiet=False)
+df = pd.read_csv("carbon_monitor.csv")
+print(df.head())
+
 def download_carbon_monitor_csv():
     url = "https://datas.carbonmonitor.org/API/downloadFullDataset.php?source=carbon_global"
     download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
