@@ -12,7 +12,7 @@ url2 = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url2, "ClimateWatchDATA.csv", quiet=False)
 df_old = "ClimateWatchDATA.csv"
 
-# ฟังก์ชันตรวจสอบปีล่าสุดในไฟล์
+# ฟังก์ชันตรวจสอบปีล่าสุดในไฟล์ 
 def max_year(filename="ClimateWatchDATA.csv"):
     try:
         df = pd.read_csv(filename)
@@ -75,7 +75,7 @@ urlCW(source_id, gas_id)
     
 def fixyear():
 # อ่านไฟล์ CSV
-    original_file = pd.read_csv('ClimateWatchData.csv')
+    original_file = pd.read_csv('ClimateWatchDATA.csv')
     climatewatch_update = pd.read_csv('ClimateWatchUPDATE.csv')
     
     # แปลงให้เป็นลิสต์ถ้ามีการใช้ string รูปแบบ list โดยใช้ ast.literal_eval()
