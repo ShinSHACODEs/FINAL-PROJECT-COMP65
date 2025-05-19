@@ -6,5 +6,3 @@ pandas
 selenium
 gdown
 helium
-sys
-ast
