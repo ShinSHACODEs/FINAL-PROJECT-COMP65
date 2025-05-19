@@ -7,7 +7,7 @@ import os
 import gdown
 
 # อ่านไฟล์เก่า
-file_id = "15j66Oa58FrQ-ad_CJtT5BGd-s6NBhxg8"
+file_id = "1CroBdP0v1YbHMD7qPyJdQPsadJZTHGfY"
 url2 = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url2, "ClimateWatchDATA.csv", quiet=False)
 df_old = "ClimateWatchDATA.csv"
