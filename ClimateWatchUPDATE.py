@@ -4,6 +4,13 @@ import requests
 import sys
 import ast
 import os
+import gdown
+
+# อ่านไฟล์เก่า
+file_id = "15j66Oa58FrQ-ad_CJtT5BGd-s6NBhxg8"
+url2 = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url2, "ClimateWatchDATA.csv", quiet=False)
+df_old = "ClimateWatchDATA.csv"
 
 # ฟังก์ชันตรวจสอบปีล่าสุดในไฟล์
 def max_year(filename="ClimateWatchDATA.csv"):
