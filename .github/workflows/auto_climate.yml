@@ -1,4 +1,4 @@
-name: Update Carmapper to Google Drive
+name: Update ClimateWatch to Google Drive
 on:
   schedule:
     - cron: '0 0 1 * *'  
