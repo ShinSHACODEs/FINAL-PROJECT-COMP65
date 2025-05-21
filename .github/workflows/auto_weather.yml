@@ -2,7 +2,7 @@ name: Update Weather Data to Google Drive
 
 on:
   schedule:
-    - cron: '0 7 * * *'  # 14:00 น. เวลาไทย (07:00 UTC)
+    - cron: '0 12 * * *' 
   workflow_dispatch:
 
 jobs:
