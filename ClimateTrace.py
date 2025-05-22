@@ -27,7 +27,7 @@ def urlCT3():
     response = requests.get(url)
     
     if response.status_code == 200:
-        download_folder = os.path.join(os.path.expanduser("~"), "Downloads")
+        download_folder = os.getcwd()
         temp_file = os.path.join(download_folder, "New_climatetrace.csv")
         with open(temp_file, 'wb') as f:
             f.write(response.content)
