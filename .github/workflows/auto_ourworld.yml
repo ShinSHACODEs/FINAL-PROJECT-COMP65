@@ -25,18 +25,27 @@ jobs:
       - name: Run OurWorldData scraper
         run: python OurWorldData.py
 
-      - name: Find generated CSV filename
-        id: find_file
+      - name: Find all generated CSV filenames
+        id: find_files
         run: |
-          # สมมติไฟล์ที่สร้างมี pattern เช่น "gas_ourworld_*.csv"
-          FILE=$(ls *_ourworld_*.csv | head -n 1)
-          echo "filename=$FILE" >> $GITHUB_OUTPUT
+          FILES=$(ls *_ourworld_*.csv | jq -R -s -c 'split("\n")[:-1]')
+          echo "files=$FILES" >> $GITHUB_OUTPUT
 
-      - name: Upload to Google Drive
+  upload-files:
+    needs: update-data
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: ${{ fromJson(needs.update-data.outputs.files) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Upload ${{ matrix.file }} to Google Drive
         uses: mathisve/gdrive-upload-action@main
         with:
-          file: ${{ steps.find_file.outputs.filename }}
-          name: ${{ steps.find_file.outputs.filename }}
+          file: ${{ matrix.file }}
+          name: ${{ matrix.file }}
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
           encoded: false
