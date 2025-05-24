@@ -1,7 +1,7 @@
-name: Update Ourworld to Google Drive
+name: Update ourworld to Google Drive
 on:
   schedule:
-    - cron: '0 0 1 12 *'  
+    - cron: '0 0 1 * *'   # 1 ทุกเดือน
   workflow_dispatch:  
 
 jobs:
@@ -25,27 +25,56 @@ jobs:
       - name: Run OurWorldData scraper
         run: python OurWorldData.py
 
-      - name: Find all generated CSV filenames
-        id: find_files
-        run: |
-          FILES=$(ls *_ourworld_*.csv | jq -R -s -c 'split("\n")[:-1]')
-          echo "files=$FILES" >> $GITHUB_OUTPUT
-
-  upload-files:
-    needs: update-data
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file: ${{ fromJson(needs.update-data.outputs.files) }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Upload ${{ matrix.file }} to Google Drive
+      - name: Upload CO2_ourworld_1.csv
         uses: mathisve/gdrive-upload-action@main
         with:
-          file: ${{ matrix.file }}
-          name: ${{ matrix.file }}
+          file: ./CO2_ourworld_1.csv
+          name: CO2_ourworld_1.csv
+          folderId: ${{ secrets.FOLDER_ID }}
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          encoded: false
+
+      - name: Upload CO2_ourworld_2.csv
+        uses: mathisve/gdrive-upload-action@main
+        with:
+          file: ./CO2_ourworld_2.csv
+          name: CO2_ourworld_2.csv
+          folderId: ${{ secrets.FOLDER_ID }}
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          encoded: false
+
+      - name: Upload CH4_ourworld_1.csv
+        uses: mathisve/gdrive-upload-action@main
+        with:
+          file: ./CH4_ourworld_1.csv
+          name: CH4_ourworld_1.csv
+          folderId: ${{ secrets.FOLDER_ID }}
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          encoded: false
+
+      - name: Upload CH4_ourworld_2.csv
+        uses: mathisve/gdrive-upload-action@main
+        with:
+          file: ./CH4_ourworld_2.csv
+          name: CH4_ourworld_2.csv
+          folderId: ${{ secrets.FOLDER_ID }}
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          encoded: false
+
+      - name: Upload N2O_ourworld_1.csv
+        uses: mathisve/gdrive-upload-action@main
+        with:
+          file: ./N2O_ourworld_1.csv
+          name: N2O_ourworld_1.csv
+          folderId: ${{ secrets.FOLDER_ID }}
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          encoded: false
+
+      - name: Upload N2O_ourworld_2.csv
+        uses: mathisve/gdrive-upload-action@main
+        with:
+          file: ./N2O_ourworld_2.csv
+          name: N2O_ourworld_2.csv
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
           encoded: false
