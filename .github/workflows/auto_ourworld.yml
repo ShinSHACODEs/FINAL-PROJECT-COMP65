@@ -1,7 +1,7 @@
 name: Update Ourworld to Google Drive
 on:
   schedule:
-    - cron: '0 0 1 12 *'   # 
+    - cron: '0 0 1 12 *'  
   workflow_dispatch:  
 
 jobs:
@@ -25,9 +25,18 @@ jobs:
       - name: Run OurWorldData scraper
         run: python OurWorldData.py
 
+      - name: Find generated CSV filename
+        id: find_file
+        run: |
+          # สมมติไฟล์ที่สร้างมี pattern เช่น "gas_ourworld_*.csv"
+          FILE=$(ls *_ourworld_*.csv | head -n 1)
+          echo "filename=$FILE" >> $GITHUB_OUTPUT
+
       - name: Upload to Google Drive
         uses: mathisve/gdrive-upload-action@main
         with:
+          file: ${{ steps.find_file.outputs.filename }}
+          name: ${{ steps.find_file.outputs.filename }}
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
           encoded: false
