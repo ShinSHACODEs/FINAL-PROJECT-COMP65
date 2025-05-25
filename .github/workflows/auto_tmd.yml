@@ -3,6 +3,7 @@ name: Update TMD Data to Google Drive
 on:
   schedule:
     - cron: '0 14 * * *'  # รันทุกวันเวลา 14:00 UTC (21:00 เวลาไทย)
+    - cron: '30 15 * * *' # รันรอบที่สองทุกวันเวลา 15:30 UTC (22:30 เวลาไทย) กันกรณีเว็บไม่ตอบสนองจากช่วงแรก
   workflow_dispatch:
 
 jobs:
