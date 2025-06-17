@@ -18,29 +18,38 @@ comapper()
 def readcsv():
     try:
         df = pd.read_csv('plume_data.csv')
+        
+        # คอลัมน์ที่ไม่ต้องการ
         columns_to_drop = [
             'plume_bounds', 'instrument', 'mission_phase', 'emission_cmf_type', 
             'emission_version', 'processing_software', 'gsd', 'sensitivity_mode', 
             'off_nadir', 'published_at', 'wind_direction_std_auto', 'wind_source_auto', 
             'platform', 'provider', 'plume_tif', 'plume_png', 'con_tif', 'rgb_tif', 'rgb_png'
         ]
-        df.drop(columns=columns_to_drop, inplace=True)
+        df.drop(columns=columns_to_drop, inplace=True, errors='ignore')
         df.drop_duplicates(inplace=True)
 
         os.remove('plume_data.csv')
 
         cleaned_file = 'plume_data_cleaned.csv'
+        unique_key = 'plume_id'  # สมมุติว่าเป็นคอลัมน์เฉพาะที่ระบุแต่ละ plume
+
         if os.path.exists(cleaned_file):
             existing_df = pd.read_csv(cleaned_file)
-            combined_df = pd.concat([existing_df, df]).drop_duplicates()
-            if len(combined_df) == len(existing_df) + len(df):
-                print("ไม่มีข้อมูลซ้ำ")
+            
+            # ตรวจสอบข้อมูลใหม่จาก unique_key
+            new_data = df[~df[unique_key].isin(existing_df[unique_key])]
+            
+            if new_data.empty:
+                print("ไม่มีข้อมูลใหม่")
             else:
-                print("มีข้อมูลซ้ำ")
-            combined_df.to_csv(cleaned_file, index=False)
+                combined_df = pd.concat([existing_df, new_data], ignore_index=True)
+                combined_df.to_csv(cleaned_file, index=False)
+                print(f"เพิ่มข้อมูลใหม่ {len(new_data)} แถว")
         else:
             df.to_csv(cleaned_file, index=False)
             print("บันทึกไฟล์ใหม่")
     except Exception as e:
         print(f"เกิดข้อผิดพลาด: {e}")
+
 readcsv()
