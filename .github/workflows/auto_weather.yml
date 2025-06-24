@@ -39,7 +39,7 @@ jobs:
       - name: Upload updated CSV to Google Drive
         uses: mathisve/gdrive-upload-action@main
         with:
-          filename: weatherdata.csv
+          filename: ./weatherdata.csv
           name: weatherdata.csv
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
