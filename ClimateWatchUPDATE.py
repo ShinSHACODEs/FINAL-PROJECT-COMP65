@@ -36,7 +36,7 @@ def urlCW(source_id, gas_id, max_pages=200):
         print(f"มีข้อมูลปีล่าสุด ({start_year}) อยู่แล้ว ไม่ต้องดึงข้อมูลใหม่.")
         sys.exit()
 
-    base_URL = "https://www.climatewatchdata.org/api/v1/data/historical_emissions?source_ids[]=226&gas_ids[]=489&page=1&per_page=200&sector_ids[]=2641&sector_ids[]=2641&sort_col=2022&sort_dir=DESC"
+    base_URL = "https://www.climatewatchdata.org/api/v1/data/historical_emissions"
     all_data = []
     page = 1
 
