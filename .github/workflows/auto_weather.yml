@@ -44,3 +44,4 @@ jobs:
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
           encoded: false
+          mime: text/csv
