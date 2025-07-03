@@ -11,15 +11,13 @@ def comapper():
         read_file = pd.read_csv(io.StringIO(response.text))        
         file_name = "plume_data.csv"
         read_file.to_csv(file_name, index=False)
-        shutil.move(file_name, os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name))
-        print("ย้ายไฟล์สำเร็จ")
-comapper()
+    else:
+        print("โหลดข้อมูลไม่สำเร็จ")
 
 def readcsv():
     try:
         df = pd.read_csv('plume_data.csv')
         
-        # คอลัมน์ที่ไม่ต้องการ
         columns_to_drop = [
             'plume_bounds', 'instrument', 'mission_phase', 'emission_cmf_type', 
             'emission_version', 'processing_software', 'gsd', 'sensitivity_mode', 
@@ -32,24 +30,22 @@ def readcsv():
         os.remove('plume_data.csv')
 
         cleaned_file = 'plume_data_cleaned.csv'
-        unique_key = 'plume_id'  # สมมุติว่าเป็นคอลัมน์เฉพาะที่ระบุแต่ละ plume
+        unique_key = 'plume_id'
 
         if os.path.exists(cleaned_file):
             existing_df = pd.read_csv(cleaned_file)
-            
-            # ตรวจสอบข้อมูลใหม่จาก unique_key
             new_data = df[~df[unique_key].isin(existing_df[unique_key])]
-            
+
             if new_data.empty:
                 print("ไม่มีข้อมูลใหม่")
             else:
                 combined_df = pd.concat([existing_df, new_data], ignore_index=True)
                 combined_df.to_csv(cleaned_file, index=False)
-                print(f"เพิ่มข้อมูลใหม่ {len(new_data)} แถว")
         else:
             df.to_csv(cleaned_file, index=False)
-            print("บันทึกไฟล์ใหม่")
+            print(f"สร้างไฟล์ใหม่ {cleaned_file} → มีทั้งหมด {len(df)} แถว")
     except Exception as e:
         print(f"เกิดข้อผิดพลาด: {e}")
 
+comapper()
 readcsv()
