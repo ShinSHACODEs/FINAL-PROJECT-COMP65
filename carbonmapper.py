@@ -1,8 +1,12 @@
 import requests
 import pandas as pd
 import io
-import shutil
+import gdown
 import os
+
+file_id = "1firkoPurXa3avZuVoafBgBs8S9mXNuyf"
+url = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url, "plume_data_cleaned.csv", quiet=False)
 
 def comapper():
     url = "https://api.carbonmapper.org/api/v1/catalog/plume-csv"
