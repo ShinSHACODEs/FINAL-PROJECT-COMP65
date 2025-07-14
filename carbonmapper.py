@@ -29,8 +29,6 @@ def readcsv():
             'platform', 'provider', 'plume_tif', 'plume_png', 'con_tif', 'rgb_tif', 'rgb_png'
         ]
         df.drop(columns=columns_to_drop, inplace=True, errors='ignore')
-        df.drop_duplicates(inplace=True)
-
         os.remove('plume_data.csv')
 
         cleaned_file = 'plume_data_cleaned.csv'
