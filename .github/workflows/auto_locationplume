@@ -1,0 +1,46 @@
+name: Update Plume Location to Google Drive
+
+on:
+  schedule:
+    - cron: '0 13 * * *' 
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Download existing CSV from Google Drive
+        env:
+          GDRIVE_FILE_ID: 1438Dy6UZkTikkinezRfOVQYRvyoWO4R4
+        run: |
+          echo "Downloading weatherdata.csv from Google Drive..."
+          gdown https://drive.google.com/uc?id=$GDRIVE_FILE_ID -O weatherdata.csv
+          
+      - name: Set timezone to Bangkok
+        run: sudo timedatectl set-timezone Asia/Bangkok
+
+      - name: Run tmd data scraper
+        run: python Weather_data.py
+
+      - name: Upload updated CSV to Google Drive
+        uses: mathisve/gdrive-upload-action@main
+        with:
+          filename: ./plume_with_country.csv
+          name: plume_with_country.csv
+          folderId: ${{ secrets.FOLDER_ID }}
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          encoded: false
