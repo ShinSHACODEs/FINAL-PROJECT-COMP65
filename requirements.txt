@@ -6,3 +6,5 @@ pandas
 selenium
 gdown
 helium
+geopandas
+shapely
