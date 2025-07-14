@@ -1,4 +1,4 @@
-name: Update TMD Data to Google Drive
+name: Update LocationMapper Data to Google Drive
 
 on:
   schedule:
