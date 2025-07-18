@@ -9,7 +9,7 @@ url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "plume_data_cleaned.csv", quiet=False)
 
 def comapper():
-    url = "https://api.carbonmapper.org/api/v1/catalog/plume-csv"
+    url = "https://api.carbonmapper.org/api/v1/catalog/plume-csv?limit=1000&offset=0"
     response = requests.get(url)
     if response.status_code == 200:
         read_file = pd.read_csv(io.StringIO(response.text))        
