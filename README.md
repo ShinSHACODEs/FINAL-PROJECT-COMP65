@@ -24,4 +24,13 @@
 # ER Diagram
 ![Diagram Final](https://github.com/user-attachments/assets/715c1214-c621-4c7b-afae-13eecf00e6c7)
 
-#กระบวนการ ETL in progress....
+# กระบวนการ Transform
+ด้วย เครื่องมือจาก PowerBI Power Query
+
+<img width="350" height="350" alt="image" src="https://github.com/user-attachments/assets/30a9d82e-07c2-4906-a164-19c851ec9bcc" />
+
+# กระบวนการ Auto Extract ไฟล์ด้วย Gtihub Action
+ข้อมูลการใช้งานอยู๋ในไฟล์ดังนี้
+https://github.com/ShinSHACODEs/Upload-file-to-Google-Drive
+
+# Dashboard in Progress...
