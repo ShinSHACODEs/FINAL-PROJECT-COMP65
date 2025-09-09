@@ -44,4 +44,3 @@ jobs:
           folderId: ${{ secrets.FOLDER_ID }}
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
           encoded: false
-          mimeType: application/vnd.google-apps.spreadsheet
