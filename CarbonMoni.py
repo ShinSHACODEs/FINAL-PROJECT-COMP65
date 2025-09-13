@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 import gdown
 
-file_id = "161FmRz3oR8kGsSwVnHFLyO5JmCDlvXl6"
+file_id = "1cuoBN00F69T7BerIHPHHOWfZSs6uqe0X"
 url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "carbon_monitor.csv", quiet=False)
 df = pd.read_csv("carbon_monitor.csv")
@@ -53,4 +53,5 @@ def download_carbon_monitor_csv():
     print(f"ลบไฟล์ดาวน์โหลดแล้ว: {filename}")
 
 download_carbon_monitor_csv()
+
 
