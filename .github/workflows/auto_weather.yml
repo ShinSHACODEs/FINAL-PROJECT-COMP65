@@ -23,6 +23,9 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y gdal-bin libgdal-dev
+
       - name: Download existing CSV from Google Drive
         env:
           GDRIVE_FILE_ID: 15LEQ1n8KD9bfMn7hUndvkVUkpPG0PFI3
