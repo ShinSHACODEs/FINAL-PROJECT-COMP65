@@ -83,7 +83,7 @@ import os, io, shutil
 
 ## Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/psu-phuket-climate.git
+git clone https://github.com/ShinSHACODEs/FINAL-PROJECT-COMP65.git
 cd psu-phuket-climate
 ```
 
