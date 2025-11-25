@@ -1,8 +1,15 @@
 import pandas as pd
 import os
+import gdown
+
+file_id = "1CEjxRDjREsAZJs7udWUyCgyJ2pSZ-y6O"
+url = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url, "temperature-anomaly.csv", quiet=False)
+df = pd.read_csv("temperature-anomaly.csv")
+print(df.head())
 
 url = "https://ourworldindata.org/grapher/temperature-anomaly.csv?v=1&csvType=full&useColumnShortNames=true"
-file_path = "temperature_anomaly.csv"
+file_path = "temperature-anomaly.csv"
 
 # ดึงข้อมูลล่าสุดจาก URL
 df_new = pd.read_csv(url)
@@ -25,4 +32,5 @@ else:
     df_new.to_csv(file_path, index=False)
     print("✅ Saved new CSV file.")
 
-print("Done ✅")
+print("Done")
+
